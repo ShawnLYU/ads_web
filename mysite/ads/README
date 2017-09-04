@@ -1,0 +1,6 @@
+MySQL update:
+	python manage.py makemigrations
+	python manage.py migrate
+MySQL:
+	create database ads_database;
+	GRANT ALL PRIVILEGES ON ads_database.* TO 'test'@'localhost' IDENTIFIED BY 'test';

@@ -58,22 +58,22 @@ def initializeExp(request):
 
 @csrf_exempt
 def register(request):
-    post_data = dict(request.POST.lists())
-    # print post_data['sid'][0]
-    # print post_data['name'][0]
-    # print post_data['cake'][0]
-    # print post_data['water'][0]
-    # print [ str(x) for x in post_data['img_seq[]'] ]
-    # print post_data['collect_group'][0]
-    # print post_data['exp_group'][0]
+    # request.POST = dict(request.POST.lists())
+    print request.POST
+    print request.POST['sid']
+    print request.POST['name']
+    print request.POST['cake']
+    print request.POST['water']
+    print request.POST['img_seq']
+    print request.POST['collect_group']
+    print request.POST['exp_group']
     # SID has been used
     if RegistrationRecord.objects.filter(sid=request.POST['sid']).count() > 0:
         return JsonResponse({"message": "The SID has been registered!","myStatus":0,"collect_group":RegistrationRecord.objects.filter(sid=request.POST['sid'])[0].collect_group})
     try:
-        img_seq = [ str(x) for x in post_data['img_seq[]'] ]
-        registrationRecord = RegistrationRecord.objects.create(sid = post_data['sid'][0],name = post_data['name'][0],mooncake = post_data['cake'][0],water = post_data['water'][0],img_seq = ','.join(img_seq),access_time = datetime.datetime.strptime(post_data['access_time'][0], static.datetime_format),reg_time = datetime.datetime.now(),collect_group = post_data['collect_group'][0],exp_group = post_data['exp_group'][0])
+        registrationRecord = RegistrationRecord.objects.create(sid = request.POST['sid'],name = request.POST['name'],mooncake = request.POST['cake'],water = request.POST['water'],img_seq = request.POST['img_seq'],access_time = datetime.datetime.strptime(request.POST['access_time'], static.datetime_format),reg_time = datetime.datetime.now(),collect_group = request.POST['collect_group'],exp_group = request.POST['exp_group'])
         registrationRecord.save()
-        return JsonResponse({"message": "Registered successfully!","myStatus":1,"collect_group":post_data['collect_group'][0]})
+        return JsonResponse({"message": "Registered successfully!","myStatus":1,"collect_group":request.POST['collect_group'][0]})
     except Exception as e: 
         return JsonResponse({"message": str(e),"myStatus":2})
     

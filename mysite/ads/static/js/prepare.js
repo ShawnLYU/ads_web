@@ -19,31 +19,39 @@ $(document).ready(function(){
         // console.log(data);
         // console.log(data['img_seq']);
         exp_data = data;
+        if(data['collect_group'] != 1){
+            $('#water-select').hide();
+        }
         if(data['exp_group'] === 1 ||  data['exp_group'] === 3){
             generateAds(data['img_seq']);
         }else{
             generateSoc(data['img_seq']);
         }
-        generateForm();
+        // generateForm();
+        generateFormPop();
         // submitting the form
         $('#submit').click(function(){
-            if($('#sid').val() == ''){
-                $("#exampleModalLabel").text('');
-                $("#exampleModalLabel").text('Registration Failed!');
-                $("#exampleModalBody").text('');
-                $("#exampleModalBody").text('Please fill in your SID!!');
-                $('#myModal').modal('toggle');
-            }else if($('#name').val() == ''){
-                $("#exampleModalLabel").text('');
-                $("#exampleModalLabel").text('Registration Failed!');
-                $("#exampleModalBody").text('');
-                $("#exampleModalBody").text('Please fill in your NAME!!');
-                $('#myModal').modal('toggle');
+            if($('#sid').val().replace(/\s/g, '') == ''){
+                // $("#exampleModalLabel").text('');
+                // $("#exampleModalLabel").text('Registration Failed!');
+                // $("#exampleModalBody").text('');
+                // $("#exampleModalBody").text('Please fill in your SID!!');
+                // $('#myModal').modal('toggle');
+                $('.error').addClass('alert alert-danger').html("Invalid SID");
+                shakeModal();
+            }else if($('#name').val().replace(/\s/g, '') == ''){
+                // $("#exampleModalLabel").text('');
+                // $("#exampleModalLabel").text('Registration Failed!');
+                // $("#exampleModalBody").text('');
+                // $("#exampleModalBody").text('Please fill in your NAME!!');
+                // $('#myModal').modal('toggle');
+                $('.error').addClass('alert alert-danger').html("Invalid name");
+                shakeModal();
             }else{
                 // submit the form to the server
-                formData = getFormData($("#myForm"));
+                formData = getFormData($("#myform"));
                 formData['access_time'] = exp_data['access_time']
-                formData['img_seq'] = exp_data['img_seq']
+                formData['img_seq'] = exp_data['img_seq'].toString()
                 formData['collect_group'] = exp_data['collect_group']
                 formData['exp_group'] = exp_data['exp_group']
                 $.ajax({
@@ -52,12 +60,15 @@ $(document).ready(function(){
                     dataType: "json",
                     data : formData
                 }).done(function(callback){
+                    console.log(callback['myStatus']);
                     if(callback['myStatus']==2){
-                        $("#exampleModalLabel").text('');
-                        $("#exampleModalLabel").text('Registration Failed!');
-                        $("#exampleModalBody").text('');
-                        $("#exampleModalBody").text(callback['message']);
-                        $('#myModal').modal('toggle');
+                        // $("#exampleModalLabel").text('');
+                        // $("#exampleModalLabel").text('Registration Failed!');
+                        // $("#exampleModalBody").text('');
+                        // $("#exampleModalBody").text(callback['message']);
+                        // $('#myModal').modal('toggle');
+                        $('.error').attr('class', 'error alert alert-danger').html(callback['message']);
+                        shakeModal();
                     }else if(callback['myStatus']==0){
                         var collect_time;
                         switch(callback['collect_group']){
@@ -71,12 +82,14 @@ $(document).ready(function(){
                                 collect_time = '2017-10-3 19:00 - 21:00'
                                 break;
                         }
-                        $("#exampleModalLabel").text('');
-                        $("#exampleModalLabel").text('Registration Failed!');
-                        $("#exampleModalBody").text('');
-                        $("#exampleModalBody").text(callback['message']);
-                        $("#exampleModalBody").append('<p>You are assigned to claim on: '+collect_time+'.</p>');
-                        $('#myModal').modal('toggle');
+                        // $("#exampleModalLabel").text('');
+                        // $("#exampleModalLabel").text('Registration Failed!');
+                        // $("#exampleModalBody").text('');
+                        // $("#exampleModalBody").text(callback['message']);
+                        // $("#exampleModalBody").append('<p>You are assigned to claim on: '+collect_time+'.</p>');
+                        // $('#myModal').modal('toggle');
+                        $('.error').attr('class', 'error alert alert-danger').html('SID has been registered, claim on: '+collect_time);
+                        shakeModal();
                     }else{
                         var collect_time;
                         switch(callback['collect_group']){
@@ -90,11 +103,13 @@ $(document).ready(function(){
                                 collect_time = '2017-10-3 19:00 - 21:00'
                                 break;
                         }
-                        $("#exampleModalLabel").text('');
-                        $("#exampleModalLabel").text('Registration Successfully!');
-                        $("#exampleModalBody").text('');
-                        $("#exampleModalBody").text('You are assigned to claim on: '+collect_time+'.');
-                        $('#myModal').modal('toggle');
+                        // $("#exampleModalLabel").text('');
+                        // $("#exampleModalLabel").text('Registration Successfully!');
+                        // $("#exampleModalBody").text('');
+                        // $("#exampleModalBody").text('You are assigned to claim on: '+collect_time+'.');
+                        // $('#myModal').modal('toggle');
+                        $('.error').attr('class', 'error alert alert-success').html('You are assigned to claim on: '+collect_time);
+                        shakeModal();
                     }
 
                 });
@@ -143,13 +158,14 @@ function generateAds(seq){
     Array.prototype.diff = function(a) {
         return this.filter(function(i) {return a.indexOf(i) < 0;});
     };
+    // Fixed: images with index 8,9,12,13 would be ads
     ads=[8,9,12,13]
     mooncakes=seq.diff(ads)
     var strVar="";
     strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/media\/img\/"+mooncakes[0]+".jpg')\">";
     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
-    strVar += "     <h3>Third Slide<\/h3>";
-    strVar += "     <p>This is a description for the third slide.<\/p>";
+    // strVar += "     <h3>Third Slide<\/h3>";
+    // strVar += "     <p>This is a description for the third slide.<\/p>";
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
     $('.carousel-inner').append(strVar);
@@ -157,14 +173,16 @@ function generateAds(seq){
         var strVar="";
         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/media\/img\/"+mooncakes[i]+".jpg')\">";
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
-        strVar += "     <h3>Third Slide<\/h3>";
-        strVar += "     <p>This is a description for the third slide.<\/p>";
+        // strVar += "     <h3>Third Slide<\/h3>";
+        // strVar += "     <p>This is a description for the third slide.<\/p>";
         strVar += " <\/div>";
         strVar += "<\/div>  "; 
         $('.carousel-inner').append(strVar);    
     }
     thisAds = ads.diff(ads.diff(seq));
     generateAdsModal(thisAds);
+    // generateAdsModalWithCountDown(thisAds);
+    // if the first images is ads, toggle it
     if(ads.indexOf(seq[0])!=-1){
         toggleAdsModal("ads_modal_"+seq[0]);
     }
@@ -174,8 +192,8 @@ function generateSoc(seq){
     var strVar="";
     strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/media\/img\/"+seq[0]+".jpg')\">";
     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
-    strVar += "     <h3>Third Slide<\/h3>";
-    strVar += "     <p>This is a description for the third slide.<\/p>";
+    // strVar += "     <h3>Third Slide<\/h3>";
+    // strVar += "     <p>This is a description for the third slide.<\/p>";
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
     $('.carousel-inner').append(strVar);
@@ -183,12 +201,22 @@ function generateSoc(seq){
         var strVar="";
         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/media\/img\/"+seq[i]+".jpg')\">";
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
-        strVar += "     <h3>Third Slide<\/h3>";
-        strVar += "     <p>This is a description for the third slide.<\/p>";
+        // strVar += "     <h3>Third Slide<\/h3>";
+        // strVar += "     <p>This is a description for the third slide.<\/p>";
         strVar += " <\/div>";
         strVar += "<\/div>  "; 
         $('.carousel-inner').append(strVar);    
     }
+}
+function generateFormPop(){
+    var strVar="";
+    strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/media\/legend-of-midautumn-1.jpg')\">";
+    strVar += " <div class=\"carousel-caption d-none d-md-block\" style=\"bottom:150px;\">";
+    strVar += "     <button type=\"button\" class=\"btn btn-outline-warning\" onclick=\"openLoginModal();\">Sign Up Now!<\/button>";
+    strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
+    strVar += " <\/div>";
+    strVar += "<\/div>  "; 
+    $('.carousel-inner').append(strVar);
 }
 function generateForm(){
     var strVar="";
@@ -259,21 +287,58 @@ function generateForm(){
     strVar += "          <\/div>";
     $('.carousel-inner').append(strVar);   
 }
+function generateAdsModalWithCountDown(ads){
+    for (var i = 0, len = ads.length; i < len; i++){
+        var strVar="";
+        strVar += "<div id=\"ads_modal_"+ads[i]+"\" class=\"modal fade interstitialModal\" tabindex=\"-1\" role=\"dialog\" data-width=\"640\" aria-labelledby=\"interstitialLabel\" aria-hidden=\"true\">";
+        strVar += "  <div class=\"modal-dialog\">";
+        strVar += "    ";
+        strVar += "    <p class=\"text-center\">Advertisement will run for 20 seconds. <a href=\"#\" data-dismiss=\"modal\">Continue to site »<\/a> <button type=\"button\" class=\"close\" data-dismiss=\"modal\"><span aria-hidden=\"true\">×<\/span><span class=\"sr-only text-muted\">Close<\/span><\/button><\/p>";
+        strVar += "    <div class=\"modal-content\">";
+        strVar += "      <div class=\"modal-body\">";
+        strVar += "        ";
+        strVar += "        <img src=\"http:\/\/placehold.it\/640X480\"><\/div>";
+        strVar += "      ";
+        strVar += "    <\/div>";
+        strVar += "  <\/div>";
+        strVar += "<\/div>";
+        $('#ads_modals').append(strVar); 
+    }
+}
+
 function generateAdsModal(ads){
     for (var i = 0, len = ads.length; i < len; i++) {
         var strVar="";
         strVar += "<div id=\"ads_modal_"+ads[i]+"\" class=\"modal\">";
-        strVar += "    <span class=\"close\" onclick=\"document.getElementById('ads_modal_"+ads[i]+"').style.display='none'\">&times;<\/span>";
+        strVar += "<p class=\"text-center close\" style=\'color:#007bff\'><\/p>"
+        // strVar += "    <span class=\"close\" onclick=\"document.getElementById('ads_modal_"+ads[i]+"').style.display='none'\">&times;<\/span>";
         strVar += "    <img class=\"modal-content\" src=\"\/static\/media\/img\/"+ads[i]+".jpg\">";
         // strVar += "    <div id=\"caption\"><\/div>";
         strVar += "<\/div>";
         $('#ads_modals').append(strVar);  
     }
-
-
 }
 function toggleAdsModal(modal_id){
     // Get the modal
     var modal = document.getElementById(modal_id);
-    modal.style.display = "block";
+    // $(modal_id).modal({show:true});
+    // $(modal_id).toggle();
+    modal.style.display = 'block';
+    countdow = 5;
+    var refreshIntervalId = setInterval(function() {
+        $('.text-center').html('Skip Ads in ' + countdow);
+        countdow -= 1;
+    },1000);
+    setTimeout(function(){ 
+        // alert("Hello");
+        $('.text-center').html('');
+        $('#'+modal_id+ ' > p').before("    <span class=\"close\" onclick=\"document.getElementById('"+modal_id+"').style.display='none'\">&times;<\/span>")
+        clearInterval(refreshIntervalId); 
+    }, 6000);
 }
+
+
+
+
+
+

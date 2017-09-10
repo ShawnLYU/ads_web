@@ -4,3 +4,9 @@ MySQL update:
 MySQL:
 	create database ads_database;
 	GRANT ALL PRIVILEGES ON ads_database.* TO 'test'@'localhost' IDENTIFIED BY 'test';
+
+Images:
+	1-7 normal pics    8,9:aad    10,11:aso    12,13:bad    14,15:bso
+
+If collect_group != 1:
+	water is given by default, please ignore

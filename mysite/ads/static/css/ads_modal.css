@@ -58,7 +58,7 @@
     top: 50px;
     right: 35px;
     color: #f1f1f1;
-    font-size: 40px;
+    /*font-size: 40px;*/
     font-weight: bold;
     transition: 0.3s;
 }
@@ -75,4 +75,29 @@
     #ads_modals .modal-content {
         width: 100%;
     }
+}
+
+
+
+
+.interstitialModal .modal-dialog
+{
+  color: #ffffff;
+}
+
+.interstitialModal .modal-body
+{
+  padding:0px;
+}
+
+.interstitialModal .modal-dialog a
+{
+  color: #ffffff;
+  text-decoration:underline;
+}
+
+.interstitialModal .modal-content
+{
+  width: 640px;
+  border: 0px;
 }

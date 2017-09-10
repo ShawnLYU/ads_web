@@ -211,7 +211,7 @@ function generateSoc(seq){
 function generateFormPop(){
     var strVar="";
     strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/media\/legend-of-midautumn-1.jpg')\">";
-    strVar += " <div class=\"carousel-caption d-none d-md-block\" style=\"bottom:150px;\">";
+    strVar += " <div class=\"carousel-caption d-md-block\" style=\"bottom:20%;\">";
     strVar += "     <button type=\"button\" class=\"btn btn-outline-warning\" onclick=\"openLoginModal();\">Sign Up Now!<\/button>";
     strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
     strVar += " <\/div>";
@@ -326,12 +326,12 @@ function toggleAdsModal(modal_id){
     modal.style.display = 'block';
     countdow = 5;
     var refreshIntervalId = setInterval(function() {
-        $('.text-center').html('Skip Ads in ' + countdow);
+        $('.text-center.close').html('Skip Ads in ' + countdow);
         countdow -= 1;
     },1000);
     setTimeout(function(){ 
         // alert("Hello");
-        $('.text-center').html('');
+        $('.text-center.close').html('');
         $('#'+modal_id+ ' > p').before("    <span class=\"close\" onclick=\"document.getElementById('"+modal_id+"').style.display='none'\">&times;<\/span>")
         clearInterval(refreshIntervalId); 
     }, 6000);

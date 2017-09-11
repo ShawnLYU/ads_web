@@ -13,7 +13,7 @@ $(document).ready(function(){
     ads=[8,9,12,13]
     exp_data={}
     $.ajax({
-        url: '/initializeExp/',
+        url: '/mooncake/initializeExp/',
         dataType: 'json'
     }).done(function(data){
         // console.log(data);
@@ -55,7 +55,7 @@ $(document).ready(function(){
                 formData['collect_group'] = exp_data['collect_group']
                 formData['exp_group'] = exp_data['exp_group']
                 $.ajax({
-                    url: '/register/',
+                    url: '/mooncake/register/',
                     type: 'POST',
                     dataType: "json",
                     data : formData

@@ -24,7 +24,7 @@ dajaxice_autodiscover()
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
-    url(r'^mooncake/home/$', home),
+    url(r'^mooncake/$', home),
     url(r'^mooncake/initializeExp/$', initializeExp, name='json'),
     url(r'^mooncake/register/$', register),
 ]

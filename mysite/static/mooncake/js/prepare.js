@@ -10,7 +10,7 @@ function getFormData($form){
 }
 $(document).ready(function(){
     // start exp
-    ads=[8,9,12,13]
+    ads=[8,9,17,18]
     exp_data={}
     $.ajax({
         url: '/mooncake/initializeExp/',
@@ -23,9 +23,9 @@ $(document).ready(function(){
             $('#water-select').hide();
         }
         if(data['exp_group'] === 1 ||  data['exp_group'] === 3){
-            generateAds(data['img_seq']);
+            generateAds(data['img_seq'],data['words']);
         }else{
-            generateSoc(data['img_seq']);
+            generateSoc(data['img_seq'],data['words']);
         }
         // generateForm();
         generateFormPop();
@@ -153,19 +153,19 @@ $(document).ready(function(){
 
 });
 
-function generateAds(seq){
+function generateAds(seq,words){
     // place mooncakes first
     Array.prototype.diff = function(a) {
         return this.filter(function(i) {return a.indexOf(i) < 0;});
     };
     // Fixed: images with index 8,9,12,13 would be ads
-    ads=[8,9,12,13]
+    ads=[8,9,17,18]
     mooncakes=seq.diff(ads)
     var strVar="";
     strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+mooncakes[0]+".jpg')\">";
     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
     // strVar += "     <h3>Third Slide<\/h3>";
-    // strVar += "     <p>This is a description for the third slide.<\/p>";
+    strVar += "     <p>" + words[mooncakes[0]] + "<\/p>";
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
     $('.carousel-inner').append(strVar);
@@ -174,7 +174,7 @@ function generateAds(seq){
         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+mooncakes[i]+".jpg')\">";
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
-        // strVar += "     <p>This is a description for the third slide.<\/p>";
+        strVar += "     <p>" + words[mooncakes[0]] + "<\/p>";
         strVar += " <\/div>";
         strVar += "<\/div>  "; 
         $('.carousel-inner').append(strVar);    
@@ -187,13 +187,13 @@ function generateAds(seq){
         toggleAdsModal("ads_modal_"+seq[0]);
     }
 }
-function generateSoc(seq){
+function generateSoc(seq, words){
 
     var strVar="";
     strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[0]+".jpg')\">";
     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
     // strVar += "     <h3>Third Slide<\/h3>";
-    // strVar += "     <p>This is a description for the third slide.<\/p>";
+    strVar += "     <p>" + words[seq[0]] + "<\/p>";
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
     $('.carousel-inner').append(strVar);
@@ -202,7 +202,7 @@ function generateSoc(seq){
         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[i]+".jpg')\">";
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
-        // strVar += "     <p>This is a description for the third slide.<\/p>";
+        strVar += "     <p>" + words[seq[0]] + "<\/p>";
         strVar += " <\/div>";
         strVar += "<\/div>  "; 
         $('.carousel-inner').append(strVar);    
@@ -212,7 +212,7 @@ function generateFormPop(){
     var strVar="";
     strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/legend-of-midautumn-1.jpg')\">";
     strVar += " <div class=\"carousel-caption d-md-block\" style=\"bottom:20%;\">";
-    strVar += "     <button type=\"button\" class=\"btn btn-outline-warning\" onclick=\"openLoginModal();\">Sign Up Now!<\/button>";
+    strVar += "     <button type=\"button\" class=\"btn btn-outline-warning btn-lg\" onclick=\"openLoginModal();\">Sign Up Now!<\/button>";
     strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
@@ -310,7 +310,7 @@ function generateAdsModal(ads){
     for (var i = 0, len = ads.length; i < len; i++) {
         var strVar="";
         strVar += "<div id=\"ads_modal_"+ads[i]+"\" class=\"modal\">";
-        strVar += "<p class=\"text-center close\" style=\'color:#007bff\'><\/p>"
+        strVar += "<p class=\"text-center close\" style=\'color:#007bff;font-size: 3rem;\'><\/p>"
         // strVar += "    <span class=\"close\" onclick=\"document.getElementById('ads_modal_"+ads[i]+"').style.display='none'\">&times;<\/span>";
         strVar += "    <img class=\"modal-content\" src=\"\/static\/mooncake\/media\/img\/"+ads[i]+".jpg\">";
         // strVar += "    <div id=\"caption\"><\/div>";
@@ -332,7 +332,7 @@ function toggleAdsModal(modal_id){
     setTimeout(function(){ 
         // alert("Hello");
         $('.text-center.close').html('');
-        $('#'+modal_id+ ' > p').before("    <span class=\"close\" onclick=\"document.getElementById('"+modal_id+"').style.display='none'\">&times;<\/span>")
+        $('#'+modal_id+ ' > p').before("    <span class=\"close\" style=\'color:#007bff;font-size: 3rem;\' onclick=\"document.getElementById('"+modal_id+"').style.display='none'\">&times;<\/span>")
         clearInterval(refreshIntervalId); 
     }, 6000);
 }

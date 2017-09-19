@@ -31,23 +31,6 @@ $(document).ready(function(){
         generateFormPop();
         // submitting the form
         $('#submit').click(function(){
-            if($('#sid').val().replace(/\s/g, '') == ''){
-                // $("#exampleModalLabel").text('');
-                // $("#exampleModalLabel").text('Registration Failed!');
-                // $("#exampleModalBody").text('');
-                // $("#exampleModalBody").text('Please fill in your SID!!');
-                // $('#myModal').modal('toggle');
-                $('.error').addClass('alert alert-danger').html("Invalid SID");
-                shakeModal();
-            }else if($('#name').val().replace(/\s/g, '') == ''){
-                // $("#exampleModalLabel").text('');
-                // $("#exampleModalLabel").text('Registration Failed!');
-                // $("#exampleModalBody").text('');
-                // $("#exampleModalBody").text('Please fill in your NAME!!');
-                // $('#myModal').modal('toggle');
-                $('.error').addClass('alert alert-danger').html("Invalid name");
-                shakeModal();
-            }else{
                 // submit the form to the server
                 formData = getFormData($("#myform"));
                 formData['access_time'] = exp_data['access_time']
@@ -114,7 +97,7 @@ $(document).ready(function(){
 
                 });
                 
-            }
+            
             
         });
     });

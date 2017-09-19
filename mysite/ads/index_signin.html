@@ -27,7 +27,8 @@
         <script src="/static/mooncake/vendor/jquery/jquery.min.js"></script>
         <script src="/static/mooncake/vendor/popper/popper.min.js"></script>
         <script src="/static/mooncake/vendor/bootstrap/js/bootstrap.js"></script>
-        <script src="/static/mooncake/js/prepare.js"></script>
+        <script src="/static/mooncake/js/signin.js"></script>
+        <script src="/static/mooncake/js/notify.js"></script>
         <script src="/static/mooncake/js/login-register.js" type="text/javascript"></script>
     </head>
 
@@ -49,16 +50,16 @@
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
           <li data-target="#carouselExampleIndicators" class="active"></li>
-          <li data-target="#carouselExampleIndicators" ></li>
-          <li data-target="#carouselExampleIndicators" ></li>
-          <li data-target="#carouselExampleIndicators" ></li>
-          <li data-target="#carouselExampleIndicators" ></li>
-          <li data-target="#carouselExampleIndicators" ></li>
-          <li data-target="#carouselExampleIndicators" ></li>
-          <li data-target="#carouselExampleIndicators" ></li>
         </ol>
         <div class="carousel-inner" role="listbox">
-         
+         <div class="carousel-item active" style="background-image: url('/static/mooncake/media/legend-of-midautumn-1.jpg')"> 
+          <div class="carousel-caption d-md-block" style="bottom:20%;">     
+            <button type="button" class="btn btn-outline-warning btn-lg" onclick="openLoginModal();">Log In Now!
+            </button>     
+            <p>If the form is not available, please access this website using a PC.
+            </p> 
+          </div>
+        </div>
 
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" id='_prev'>
@@ -122,41 +123,18 @@
           <div class="modal-content">
              <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Registration form</h4>
+                <h6 class="modal-title">Login with your SID and name</h6>
             </div>
             <div class="modal-body">  
                 <div class="box">
                      <div class="content">
                         <div class="error"></div>
                         <div class="form loginBox">
-                            <form method="post" id='myform' accept-charset="UTF-8">
-                               {% csrf_token %}
-                            <div class="form-group">
-                                <label for="cake">Cake list:</label>
-                                <select class="form-control" form='myform' id='cake' name='cake'>
-                                    <option value='cake1'>cake1</option>
-                                    <option value='cake2'>cake2</option>
-                                    <option value='cake3'>cake3</option>
-                                </select>
-                            </div>
-                            <div id='water-select'>
-                                <div class="division">
-                                    <div class="line l"></div>
-                                      <span>Water(also free)</span>
-                                    <div class="line r"></div>
-                                </div>
-                                <div class="social">
-                                    <img class="img-circle" src="/static/mooncake/media/bonaque.jpg">
-                                    <img class="img-circle" src="/static/mooncake/media/watson.jpg">
-                                </div>
-                                <div class="form-group">
-                                    <select class="form-control" form='myform' id='water' name='water'>
-                                        <option value='bonaque'>Bonaque</option>
-                                        <option value='watson'>Watson</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <input class="btn btn-default btn-login" type="button" value="Submit" id='submit'>
+                            <form method="post" id='myform' action='/mooncake/home/' accept-charset="UTF-8">
+                              {% csrf_token %}
+                            <input id="sid" class="form-control" type="text" placeholder="Student ID" name="sid">
+                            <input id="name" class="form-control" type="text" placeholder="Full Name" name="name">
+                            <button class="btn btn-default btn-login" type="submit" value="Submit" id='submit'>Submit</button>
                             </form>
                         </div>
                      </div>

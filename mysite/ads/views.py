@@ -12,9 +12,20 @@ from django.http import JsonResponse
 import random
 import datetime
 import static
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
+
+def login(request):
+    return render(request, "index_signin.html")
 
 def home(request):
+    # print request.POST
+    # print request.POST['sid']
+    # print request.POST['name']
+    if 'sid' not in request.POST.keys():
+    # if request.POST['sid'] == '' or request.POST['name'] == '':
+        return render(request, "index_signin.html")
+    request.session['sid'] = request.POST['sid']
+    request.session['name'] = request.POST['name']
     return render(request, "index_reg.html")
 
 def mixLists(a,b):
@@ -26,14 +37,21 @@ def mixLists(a,b):
             isNotValid = False
     return img_seq
 
+epoch = datetime.datetime.utcfromtimestamp(0)
 
+def unix_time_millis(dt):
+    '''
+    compute the unix time, or seconds/milliseconds since the 1970 epoch.
+    returns a int
+    '''
+    return int((dt - epoch).total_seconds() * 1000.0)
 
 def initializeExp(request):
+    print 'a',request.session['sid']
+    # print RegistrationRecord.objects.filter(sid=request.session['sid'])
+    timeAccessed = datetime.datetime.now()
     # prepare json data for front end
     data={}
-    # random experiment groups
-    data['exp_group'] = random.randint(1,5)
-    data['collect_group'] = random.randint(1,3)
     # define words
     data['words']={
         1:"The earliest discovered traces of art are beads and carvings, and then paintings, from sites dating back to the Upper Paleolithic period. We might expect that early artistic efforts would be crude, but the cave paintings of Spain and southern France show a marked degree of skill. So do the naturalistic paintings on slabs of stone excavated in southern Africa. ",
@@ -58,44 +76,75 @@ def initializeExp(request):
         24:"We will provide ample opportunities for the students to practice their match skills and team work on the field during the camp. It will be an intensive, exciting and fun camp for all who join!Join us for a poolside lunch at the USRC after the camp on 14th Friday! 12:30 for $100/child, $180/ adult  (Authentic Indian food and western food!)",
         25:"Column Selection can be used to select a rectangular area of a file. Column selection doesn't operate via a separate mode, instead it makes use of multiple selections.",
     }
-    # 1. a水广告 * 2
-    # 2. a水social media * 2
-    # 3. b水广告 * 2
-    # 4. b水social media * 2
-    # 5. 月饼图片 * 7
+
     # img source: 1-7 normal pics    8,9:aad    10-16:aso    17,18:bad    19-25:bso
     # ads should be adjacent
-    if data['exp_group'] == 1:
-        data['img_seq'] = mixLists(range(1,8), [8,9])
-    elif data['exp_group'] == 2:
-        data['img_seq'] = mixLists(range(1,6), random.sample(range(10,17),2))
-    elif data['exp_group'] == 3:
-        data['img_seq'] = mixLists(range(1,8), [17,18])
-    elif data['exp_group'] == 4:
-        data['img_seq'] = mixLists(range(1,6), random.sample(range(19,26),2))
-    elif data['exp_group'] == 5:
-        img_seq = range(1,8)
-        random.shuffle(img_seq)
+
+    if RegistrationRecord.objects.filter(sid=request.session['sid']).count() == 0:
+        # random experiment groups
+        # there will be 12 categories of groups
+        data['exp_group'] = unix_time_millis(timeAccessed) % 4 + 1
+        data['collect_group'] = unix_time_millis(timeAccessed) % 3 + 1
+        if data['exp_group'] == 1:
+            data['img_seq'] = mixLists(range(1,8), [8,9])
+        elif data['exp_group'] == 2:
+            data['img_seq'] = mixLists(range(1,6), random.sample(range(10,17),2))
+        elif data['exp_group'] == 3:
+            data['img_seq'] = mixLists(range(1,8), [17,18])
+        elif data['exp_group'] == 4:
+            data['img_seq'] = mixLists(range(1,6), random.sample(range(19,26),2))
+        elif data['exp_group'] == 5:
+            img_seq = range(1,8)
+            random.shuffle(img_seq)
+            data['img_seq'] = img_seq
+        data['access_time'] = timeAccessed.strftime(static.datetime_format)
+
+        registrationRecord = RegistrationRecord.objects.create()
+        registrationRecord.sid = request.session['sid']
+        registrationRecord.name = request.session['name']
+        registrationRecord.img_seq = data['img_seq']
+        registrationRecord.access_time = timeAccessed
+        registrationRecord.collect_group = data['collect_group']
+        registrationRecord.exp_group = data['exp_group']
+        registrationRecord.save()
+    else:
+        
+        registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
+        # print int(registrationRecord.exp_group)
+        # print data.keys()
+        # data['a']='a'
+        # print data.keys()
+        exp_group = int(registrationRecord.exp_group)
+        data['exp_group'] = exp_group
+
+        collect_group = int(registrationRecord.collect_group)
+        data['collect_group'] = collect_group
+
+        img_seq = registrationRecord.img_seq
+        img_seq = list(eval(img_seq.strip('[').strip(']')))
         data['img_seq'] = img_seq
-    data['access_time'] = datetime.datetime.now().strftime(static.datetime_format)
+
+        access_time = registrationRecord.access_time.strftime(static.datetime_format)
+        data['access_time'] = access_time
+        print data['img_seq']
     return HttpResponse(json.dumps(data), content_type='application/json')
 
-@csrf_exempt
 def register(request):
-    # request.POST = dict(request.POST.lists())
-    print request.POST
-    print request.POST['sid']
-    print request.POST['name']
+    registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
     print request.POST['cake']
     print request.POST['water']
     print request.POST['img_seq']
     print request.POST['collect_group']
     print request.POST['exp_group']
     # SID has been used
-    if RegistrationRecord.objects.filter(sid=request.POST['sid']).count() > 0:
-        return JsonResponse({"message": "The SID has been registered!","myStatus":0,"collect_group":RegistrationRecord.objects.filter(sid=request.POST['sid'])[0].collect_group})
+    print registrationRecord.mooncake != 'nil'
+    if registrationRecord.mooncake != 'nil':
+        return JsonResponse({"message": "The SID has been registered!","myStatus":0,"collect_group":registrationRecord.collect_group})
     try:
-        registrationRecord = RegistrationRecord.objects.create(sid = request.POST['sid'],name = request.POST['name'],mooncake = request.POST['cake'],water = request.POST['water'],img_seq = request.POST['img_seq'],access_time = datetime.datetime.strptime(request.POST['access_time'], static.datetime_format),reg_time = datetime.datetime.now(),collect_group = request.POST['collect_group'],exp_group = request.POST['exp_group'])
+        # registrationRecord = RegistrationRecord.objects.create(sid = request.POST['sid'],name = request.POST['name'],mooncake = request.POST['cake'],water = request.POST['water'],img_seq = request.POST['img_seq'],access_time = datetime.datetime.strptime(request.POST['access_time'], static.datetime_format),reg_time = datetime.datetime.now(),collect_group = request.POST['collect_group'],exp_group = request.POST['exp_group'])
+        registrationRecord.mooncake = request.POST['cake']
+        registrationRecord.water = request.POST['water']
+        registrationRecord.reg_time = datetime.datetime.now()
         registrationRecord.save()
         return JsonResponse({"message": "Registered successfully!","myStatus":1,"collect_group":request.POST['collect_group'][0]})
     except Exception as e: 

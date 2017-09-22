@@ -16,14 +16,25 @@ import static
 
 def login(request):
     return render(request, "index_signin.html")
-
+def afterClaiming(request):
+    return render(request, "recog.html")
+def prepareInfo(request):
+    registrationRecords = RegistrationRecord.objects.all()
+    data={}
+    data['sids'] = [e.sid for e in registrationRecords]
+    data['names'] = [e.name for e in registrationRecords]
+    return HttpResponse(json.dumps(data), content_type='application/json')
 def home(request):
     # print request.POST
     # print request.POST['sid']
     # print request.POST['name']
     if 'sid' not in request.POST.keys():
-    # if request.POST['sid'] == '' or request.POST['name'] == '':
         return render(request, "index_signin.html")
+    # if RegistrationRecord.objects.filter(sid=request.session['sid']).count() > 0:
+    #     registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
+    #     if registrationRecord.name != request.POST['name']:
+    #         return JsonResponse({"message": 'not match',"myStatus":1})
+    # else:
     request.session['sid'] = request.POST['sid']
     request.session['name'] = request.POST['name']
     return render(request, "index_reg.html")
@@ -47,7 +58,7 @@ def unix_time_millis(dt):
     return int((dt - epoch).total_seconds() * 1000.0)
 
 def initializeExp(request):
-    print 'a',request.session['sid']
+    # print 'a',request.session['sid']
     # print RegistrationRecord.objects.filter(sid=request.session['sid'])
     timeAccessed = datetime.datetime.now()
     # prepare json data for front end
@@ -126,10 +137,12 @@ def initializeExp(request):
 
         access_time = registrationRecord.access_time.strftime(static.datetime_format)
         data['access_time'] = access_time
-        print data['img_seq']
+        # print data['img_seq']
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def register(request):
+    if 'sid' not in request.session:
+        return render(request, "index_signin.html")
     registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
     print request.POST['cake']
     print request.POST['water']
@@ -145,6 +158,7 @@ def register(request):
         registrationRecord.mooncake = request.POST['cake']
         registrationRecord.water = request.POST['water']
         registrationRecord.reg_time = datetime.datetime.now()
+        registrationRecord.recog = request.POST['recog']
         registrationRecord.save()
         return JsonResponse({"message": "Registered successfully!","myStatus":1,"collect_group":request.POST['collect_group'][0]})
     except Exception as e: 
@@ -153,8 +167,43 @@ def register(request):
 
 
 
+def tracking(request):
+    print request.session['sid']
+    print request.POST['img_index']
+    registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
+    if int(request.POST['img_index']) > registrationRecord.tracking:
+        registrationRecord.tracking = int(request.POST['img_index'])
+        registrationRecord.save()
+    return HttpResponse('Updated')
 
 
+
+
+
+
+def checkSidEid(request):
+    print request.POST['sid']
+    print request.POST['name']
+    if RegistrationRecord.objects.filter(sid=request.POST['sid']).count() > 0:
+        registrationRecord = RegistrationRecord.objects.filter(sid=request.POST['sid'])[0]
+        if registrationRecord.name != request.POST['name']:
+            return JsonResponse({"message": 'not match',"myStatus":1})
+    return JsonResponse({"message": 'not match',"myStatus":0})
+
+
+
+def recog(request):
+    # print 'a'
+    print request.POST['info']
+    registrationRecord = RegistrationRecord.objects.filter(sid=request.POST['info'])[0]
+    if registrationRecord.recog == 'nil':
+        registrationRecord.recog = request.POST['recog']
+        registrationRecord.save()
+        # print 'b'
+        return JsonResponse({"message": 'success',"myStatus":0})
+    else:
+        # print 'c'
+        return JsonResponse({"message": 'already selected',"myStatus":1})
 
 
 

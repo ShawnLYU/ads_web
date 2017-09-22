@@ -1,3 +1,30 @@
+function showLoginForm(){
+    $('#loginModal .registerBox').fadeOut('fast',function(){
+        $('.loginBox').fadeIn('fast');
+        $('.register-footer').fadeOut('fast',function(){
+            $('.login-footer').fadeIn('fast');    
+        });
+        
+        $('.modal-title').html('Login with');
+    });       
+     $('.error').removeClass('alert alert-danger').html(''); 
+}
+
+function openLoginModal(id){
+    showLoginForm();
+    setTimeout(function(){
+        $(id).modal('show');    
+    }, 230);
+    
+}
+function shakeModal(){
+    $('#loginModal .modal-dialog').addClass('shake');
+            // $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
+            setTimeout( function(){ 
+                $('#loginModal .modal-dialog').removeClass('shake'); 
+    }, 1000 ); 
+}
+
 function getFormData($form){
     var unindexed_array = $form.serializeArray();
     var indexed_array = {};
@@ -9,6 +36,7 @@ function getFormData($form){
     return indexed_array;
 }
 $(document).ready(function(){
+    // autoType(".type-js",10);
     // start exp
     ads=[8,9,17,18]
     exp_data={}
@@ -30,13 +58,89 @@ $(document).ready(function(){
         // generateForm();
         generateFormPop();
         // submitting the form
+        $('#fake_submit').click(function(){
+            if(exp_data['collect_group'] == 1){
+                openLoginModal('#recogModal');
+            }
+            else{
+                                formData = getFormData($("#myform"));
+                formData['access_time'] = exp_data['access_time']
+                formData['img_seq'] = exp_data['img_seq'].toString()
+                formData['collect_group'] = exp_data['collect_group']
+                formData['exp_group'] = exp_data['exp_group']
+                formData['recog'] = $('#recogForm :input').eq(1).val()
+                $.ajax({
+                    url: '/mooncake/register/',
+                    type: 'POST',
+                    dataType: "json",
+                    data : formData
+                }).done(function(callback){
+                    console.log(callback['myStatus']);
+                    if(callback['myStatus']==2){
+                        // $("#exampleModalLabel").text('');
+                        // $("#exampleModalLabel").text('Registration Failed!');
+                        // $("#exampleModalBody").text('');
+                        // $("#exampleModalBody").text(callback['message']);
+                        // $('#myModal').modal('toggle');
+                        $('.error').attr('class', 'error alert alert-danger').html(callback['message']);
+                        shakeModal();
+                    }else if(callback['myStatus']==0){
+                        var collect_time;
+                        switch(callback['collect_group']){
+                            case '1':
+                                collect_time = '2017-10-1 19:00 - 21:00'
+                                break;
+                            case '2':
+                                collect_time = '2017-10-2 19:00 - 21:00'
+                                break;
+                            case '3':
+                                collect_time = '2017-10-3 19:00 - 21:00'
+                                break;
+                        }
+                        // $("#exampleModalLabel").text('');
+                        // $("#exampleModalLabel").text('Registration Failed!');
+                        // $("#exampleModalBody").text('');
+                        // $("#exampleModalBody").text(callback['message']);
+                        // $("#exampleModalBody").append('<p>You are assigned to claim on: '+collect_time+'.</p>');
+                        // $('#myModal').modal('toggle');
+                        $('.error').attr('class', 'error alert alert-danger').html('SID has been registered, claim on: '+collect_time);
+                        shakeModal();
+                    }else{
+                        var collect_time;
+                        switch(callback['collect_group']){
+                            case '1':
+                                collect_time = '2017-10-1 19:00 - 21:00'
+                                break;
+                            case '2':
+                                collect_time = '2017-10-2 19:00 - 21:00'
+                                break;
+                            case '3':
+                                collect_time = '2017-10-3 19:00 - 21:00'
+                                break;
+                        }
+                        // $("#exampleModalLabel").text('');
+                        // $("#exampleModalLabel").text('Registration Successfully!');
+                        // $("#exampleModalBody").text('');
+                        // $("#exampleModalBody").text('You are assigned to claim on: '+collect_time+'.');
+                        // $('#myModal').modal('toggle');
+                        $('.error').attr('class', 'error alert alert-success').html('You are assigned to claim on: '+collect_time);
+                        shakeModal();
+                    }
+
+                });
+
+            }
+            
+        })
         $('#submit').click(function(){
+                $('#recogModal').modal('hide'); 
                 // submit the form to the server
                 formData = getFormData($("#myform"));
                 formData['access_time'] = exp_data['access_time']
                 formData['img_seq'] = exp_data['img_seq'].toString()
                 formData['collect_group'] = exp_data['collect_group']
                 formData['exp_group'] = exp_data['exp_group']
+                formData['recog'] = $('#recogForm :input').eq(1).val()
                 $.ajax({
                     url: '/mooncake/register/',
                     type: 'POST',
@@ -107,12 +211,14 @@ $(document).ready(function(){
 
     $('#_prev').hide();
     $('#_next').click(function(){
+        
         if($('div.carousel-item.active').index() === $('div.carousel-item').length-2){
             $('#_next').hide();
             if(ads.indexOf(exp_data['img_seq'][exp_data['img_seq'].length-1])!=-1){
                 toggleAdsModal("ads_modal_"+exp_data['img_seq'][exp_data['img_seq'].length-1]);
             }
         }else{
+            autoType(".type-js",10, $('div.carousel-item.active').index()+1);
             $('#_next').show();
             $('#_prev').show();
         }
@@ -122,9 +228,11 @@ $(document).ready(function(){
 
     });
     $('#_prev').click(function(){
+        
         if($('div.carousel-item.active').index() === 1){
             $('#_prev').hide();
         }else{
+            autoType(".type-js",10, $('div.carousel-item.active').index()-1);
             $('#_next').show();
             $('#_prev').show();
         }
@@ -148,7 +256,9 @@ function generateAds(seq,words){
     strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+mooncakes[0]+".jpg')\">";
     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
     // strVar += "     <h3>Third Slide<\/h3>";
-    strVar += "     <p>" + words[mooncakes[0]] + "<\/p>";
+    strVar += "<div class=\"type-js headline\">";
+    strVar += "     <p class='text-js'>" + words[mooncakes[0]] + "<\/p>";
+    strVar += " <\/div>";
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
     $('.carousel-inner').append(strVar);
@@ -157,7 +267,9 @@ function generateAds(seq,words){
         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+mooncakes[i]+".jpg')\">";
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
-        strVar += "     <p>" + words[mooncakes[0]] + "<\/p>";
+        strVar += "<div class=\"type-js headline\">";
+        strVar += "     <p class='text-js'>" + words[mooncakes[i]] + "<\/p>";
+        strVar += " <\/div>";
         strVar += " <\/div>";
         strVar += "<\/div>  "; 
         $('.carousel-inner').append(strVar);    
@@ -176,7 +288,9 @@ function generateSoc(seq, words){
     strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[0]+".jpg')\">";
     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
     // strVar += "     <h3>Third Slide<\/h3>";
-    strVar += "     <p>" + words[seq[0]] + "<\/p>";
+    strVar += "<div class=\"type-js headline\">";
+    strVar += "     <p class='text-js'>" + words[seq[0]] + "<\/p>";
+    strVar += " <\/div>";
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
     $('.carousel-inner').append(strVar);
@@ -185,7 +299,9 @@ function generateSoc(seq, words){
         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[i]+".jpg')\">";
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
-        strVar += "     <p>" + words[seq[0]] + "<\/p>";
+        strVar += "<div class=\"type-js headline\">";
+        strVar += "     <p class='text-js'>" + words[seq[i]] + "<\/p>";
+        strVar += " <\/div>";
         strVar += " <\/div>";
         strVar += "<\/div>  "; 
         $('.carousel-inner').append(strVar);    
@@ -195,7 +311,7 @@ function generateFormPop(){
     var strVar="";
     strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/legend-of-midautumn-1.jpg')\">";
     strVar += " <div class=\"carousel-caption d-md-block\" style=\"bottom:20%;\">";
-    strVar += "     <button type=\"button\" class=\"btn btn-outline-warning btn-lg\" onclick=\"openLoginModal();\">Sign Up Now!<\/button>";
+    strVar += "     <button type=\"button\" class=\"btn btn-outline-warning btn-lg\" onclick=\"openLoginModal('#loginModal');\">Sign Up Now!<\/button>";
     strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
     strVar += " <\/div>";
     strVar += "<\/div>  "; 

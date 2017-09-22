@@ -29,10 +29,10 @@ function showLoginForm(){
      $('.error').removeClass('alert alert-danger').html(''); 
 }
 
-function openLoginModal(){
+function openLoginModal(id){
     showLoginForm();
     setTimeout(function(){
-        $('#loginModal').modal('show');    
+        $(id).modal('show');    
     }, 230);
     
 }

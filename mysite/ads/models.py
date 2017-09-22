@@ -20,3 +20,7 @@ class RegistrationRecord(models.Model):
 	collect_group = models.TextField(default='nil')
 	# experiment group
 	exp_group = models.TextField(default='nil')
+	# images viewed
+	tracking = models.IntegerField(default=0)
+	# recog
+	recog = models.TextField(default='nil')

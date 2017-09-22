@@ -28,4 +28,9 @@ urlpatterns = [
     url(r'^mooncake/home/$', home),
     url(r'^mooncake/initializeExp/$', initializeExp, name='json'),
     url(r'^mooncake/register/$', register),
+    url(r'^mooncake/tracking/$', tracking),
+    url(r'^mooncake/checkSidEid/$', checkSidEid),
+    url(r'^mooncake/afterClaiming/$', afterClaiming),
+    url(r'^mooncake/prepareInfo/$', prepareInfo),
+    url(r'^mooncake/recog/$', recog),
 ]

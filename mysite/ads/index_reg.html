@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
         <link href="/static/mooncake/break-animate/css/style.css" rel="stylesheet" />
         <link href="/static/mooncake/auto-typing/css/style.css" rel="stylesheet" />
+        <link href="/static/mooncake/css/recog.css" rel="stylesheet">
 
 
         <!-- Bootstrap core JavaScript -->
@@ -186,21 +187,53 @@
                             <div id='water-select'>
                                 <div class="division">
                                     
-                                      <span>Could you identify which of the following you've seen in the previous images</span>
+                                      <span>Choose the one that you've seen in the previous images</span>
                                     
                                 </div>
                                 <div class="social">
+                                  <label>
+                                    <input type="radio" name="fb" value='bonaque' checked/>
                                     <img class="img-circle" src="/static/mooncake/media/bonaque.jpg">
+                                  </lable>
+                                  <label>
+                                    <input type="radio" name="fb" value='watson'/>
                                     <img class="img-circle" src="/static/mooncake/media/watson.jpg">
-                                </div>
-                                <div class="form-group">
-                                    <select class="form-control" form='myform' id='recog_water' name='water'>
-                                        <option value='bonaque'>Bonaque</option>
-                                        <option value='watson'>Watson</option>
-                                    </select>
+                                  </lable>
+                                    
                                 </div>
                             </div>
                             <input class="btn btn-default btn-login" type="button" value="Submit" id='submit'>
+                            </form>
+                        </div>
+                     </div>
+                </div>
+            </div>       
+        </div>
+    </div>
+</div>
+
+<div class="modal fade login" id="recogTipsModal">
+      <div class="modal-dialog login animated">
+          <div class="modal-content">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">One more question</h4>
+            </div>
+            <div class="modal-body">  
+                <div class="box">
+                     <div class="content">
+                        
+                        <div class="form loginBox">
+                            <form method="post" id='recogForm' accept-charset="UTF-8">
+                               {% csrf_token %}
+                            <div>
+                                <div class="division">
+                                    
+                                      <span>Could you identify which of the following you've seen in the previous images</span>
+                                    
+                                </div>
+                            </div>
+                            <input class="btn btn-default btn-login" type="button" value="Ready!" id='tipsSubmit'>
                             </form>
                         </div>
                      </div>

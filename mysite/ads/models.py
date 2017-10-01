@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+import datetime
 
 # Create your models here.
 class RegistrationRecord(models.Model):
@@ -12,10 +13,10 @@ class RegistrationRecord(models.Model):
 	water = models.TextField(default='nil')
 	# which image to display (split by ',')
 	img_seq = models.TextField(default='nil')
-	# access this website  time
-	access_time = models.DateTimeField(auto_now=True)
-	# registration time
-	reg_time = models.DateTimeField(auto_now=True)
+	# access the recog page
+	access_time = models.DateTimeField(default=datetime.datetime.now)
+	# finish the recog page
+	reg_time = models.DateTimeField(default=datetime.datetime.now)
 	# collection time slot group
 	collect_group = models.TextField(default='nil')
 	# experiment group

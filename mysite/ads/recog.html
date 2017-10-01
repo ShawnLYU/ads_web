@@ -1,5 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
 
+    <head>
 <style type="text/css">
+
 html{
    /*background:url(http://phutora.com/img/friends3.jpg) no-repeat;*/
    background-size: cover;
@@ -131,48 +135,63 @@ input:required, textarea:required {
       padding-left: 3%;
       padding-right: 3%;
    }
-}</style>
+}
+
+label > input{ /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+label > input + img{ /* IMAGE STYLES */
+  cursor:pointer;
+  border:2px solid transparent;
+}
+label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
+  border:2px solid #f00;
+}
+
+</style>
         <script src="/static/mooncake/vendor/jquery/jquery.min.js"></script>
         <script src="/static/mooncake/vendor/popper/popper.min.js"></script>
         <script src="/static/mooncake/vendor/bootstrap/js/bootstrap.js"></script>
-        <script src="/static/mooncake/js/notify.js"></script>
-
+        
+</head>
+<body>
 <div id="contact-form">
 	<div>
 		<h1>Thanks for comming!</h1> 
 		<h4>We have a small question.</h4> 
 	</div>
-		<p id="failure">Oopsie...message not sent.</p>  
-		<p id="success">Your message was sent successfully. Thank you!</p>
-
-		   <form method="post" id='myform'>
+		   <form id='myform'>
 		   	{% csrf_token %}
 			<div>		          
 		      <label for="info">
 		      <span>Subject: </span>
-			      <select id="info" name="info" tabindex="4">   
+			      <select id="info" name="info" tabindex="4"> 
+            <option>Choose your SID and EID here</option>  
 			      </select>
 		      </label>
 			</div>
-            <div class="social">
+<!--             <div class="social">
                 <img class="img-circle" src="/static/mooncake/media/bonaque.jpg">
                 <img class="img-circle" src="/static/mooncake/media/watson.jpg">
-            </div>
+            </div> -->
 			<div>		          
-		      <label for="recog">
-		      <!-- <span>Subject: </span> -->
-			      <select id="recog" name="recog" tabindex="4">   
-                        <option value='bonaque'>Bonaque</option>
-                        <option value='watson'>Watson</option>
-			      </select>
-		      </label>
+      <label>
+        <input type="radio" name="recog" value='bonaque' checked/>
+        <img class="img-circle" src="/static/mooncake/media/bonaque.jpg">
+      </lable>
+      <label>
+        <input type="radio" name="recog" value='watson'/>
+        <img class="img-circle" src="/static/mooncake/media/watson.jpg">
+      </lable>
 			</div>
 			<div>		           
-		      <button name="submit" id="submit" >SEND</button> 
+		      <button type='button' id="submit" >SEND</button> 
 			</div>
 		   </form>
 
 	</div>
+</body>
 <script type="text/javascript">
 function getFormData($form){
     var unindexed_array = $form.serializeArray();
@@ -185,6 +204,9 @@ function getFormData($form){
     return indexed_array;
 }
 $(document).ready(function(){
+  $.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
 	exp_data={};
     $.ajax({
         url: '/mooncake/prepareInfo/',
@@ -196,6 +218,14 @@ $(document).ready(function(){
     			"<option value='"+data['sids'][i]+"''>"+data['sids'][i]+','+data['names'][i]+"<\/option>"
     			);
     	}
+    });
+    $("#info").change(function(){
+        $.ajax({
+            url: '/mooncake/beforeRecogAfterClaiming/',
+            type: 'POST',
+            dataType: "json",
+            data : {'sid':$('#info').val()}
+        });
     });
     $('#submit').click(function(){
     	formData = getFormData($("#myform"));
@@ -213,6 +243,9 @@ $(document).ready(function(){
                 // $.notify("success!", "success");
                 alert('Succeeded!');
             }
+        }).fail(function(e)  {
+          console.log("ERROR: ", e);
+            alert(e);
         });
 
 
@@ -225,3 +258,5 @@ $(document).ready(function(){
 
 </script>
 
+
+</html>

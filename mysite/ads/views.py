@@ -12,6 +12,8 @@ from django.http import JsonResponse
 import random
 import datetime
 import static
+from django.utils import timezone
+
 # from django.views.decorators.csrf import csrf_exempt
 
 def login(request):
@@ -19,6 +21,7 @@ def login(request):
 def afterClaiming(request):
     return render(request, "recog.html")
 def prepareInfo(request):
+    # registrationRecords = RegistrationRecord.objects.filter(recog = 'nil')
     registrationRecords = RegistrationRecord.objects.all()
     data={}
     data['sids'] = [e.sid for e in registrationRecords]
@@ -60,7 +63,7 @@ def unix_time_millis(dt):
 def initializeExp(request):
     # print 'a',request.session['sid']
     # print RegistrationRecord.objects.filter(sid=request.session['sid'])
-    timeAccessed = datetime.datetime.now()
+    # timeAccessed = datetime.datetime.now()
     # prepare json data for front end
     data={}
     # define words
@@ -89,13 +92,29 @@ def initializeExp(request):
     }
 
     # img source: 1-7 normal pics    8,9:aad    10-16:aso    17,18:bad    19-25:bso
-    # ads should be adjacent
+    # ads should not be adjacent
 
     if RegistrationRecord.objects.filter(sid=request.session['sid']).count() == 0:
         # random experiment groups
         # there will be 12 categories of groups
-        data['exp_group'] = unix_time_millis(timeAccessed) % 4 + 1
-        data['collect_group'] = unix_time_millis(timeAccessed) % 3 + 1
+        RegistrationRecord.objects.create(sid=request.session['sid'])
+        registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
+        this_id = registrationRecord.id % 12
+        '''
+        this_id = [0,1,2,...,11]
+        group index defined
+                    a1  a2  a3  a4
+        collect_1   0   1   2   3
+        collect_2   4   5   6   7
+        collect_3   8   9   10  11
+
+        '''
+        data['exp_group'] = this_id % 4 + 1 # starting from 1
+        # data['collect_group'] = 1 if this_id < 4 else 2 if this_id < 8 else 3
+        data['collect_group'] = 1
+        # data['exp_group'] = unix_time_millis(timeAccessed) % 4 + 1 # starting from 1
+        # data['collect_group'] = unix_time_millis(timeAccessed) % 3 + 1 # starting from 1
+
         if data['exp_group'] == 1:
             data['img_seq'] = mixLists(range(1,8), [8,9])
         elif data['exp_group'] == 2:
@@ -108,13 +127,13 @@ def initializeExp(request):
             img_seq = range(1,8)
             random.shuffle(img_seq)
             data['img_seq'] = img_seq
-        data['access_time'] = timeAccessed.strftime(static.datetime_format)
+        # data['access_time'] = timeAccessed.strftime(static.datetime_format)
 
-        registrationRecord = RegistrationRecord.objects.create()
+        
         registrationRecord.sid = request.session['sid']
         registrationRecord.name = request.session['name']
         registrationRecord.img_seq = data['img_seq']
-        registrationRecord.access_time = timeAccessed
+        # registrationRecord.access_time = timeAccessed
         registrationRecord.collect_group = data['collect_group']
         registrationRecord.exp_group = data['exp_group']
         registrationRecord.save()
@@ -135,8 +154,8 @@ def initializeExp(request):
         img_seq = list(eval(img_seq.strip('[').strip(']')))
         data['img_seq'] = img_seq
 
-        access_time = registrationRecord.access_time.strftime(static.datetime_format)
-        data['access_time'] = access_time
+        # access_time = registrationRecord.access_time.strftime(static.datetime_format)
+        # data['access_time'] = access_time
         # print data['img_seq']
     return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -150,15 +169,15 @@ def register(request):
     print request.POST['collect_group']
     print request.POST['exp_group']
     # SID has been used
-    print registrationRecord.mooncake != 'nil'
     if registrationRecord.mooncake != 'nil':
         return JsonResponse({"message": "The SID has been registered!","myStatus":0,"collect_group":registrationRecord.collect_group})
     try:
         # registrationRecord = RegistrationRecord.objects.create(sid = request.POST['sid'],name = request.POST['name'],mooncake = request.POST['cake'],water = request.POST['water'],img_seq = request.POST['img_seq'],access_time = datetime.datetime.strptime(request.POST['access_time'], static.datetime_format),reg_time = datetime.datetime.now(),collect_group = request.POST['collect_group'],exp_group = request.POST['exp_group'])
         registrationRecord.mooncake = request.POST['cake']
         registrationRecord.water = request.POST['water']
-        registrationRecord.reg_time = datetime.datetime.now()
-        registrationRecord.recog = request.POST['recog']
+        if registrationRecord.recog == 'nil':
+            registrationRecord.reg_time = timezone.now()   
+            registrationRecord.recog = request.POST['recog']
         registrationRecord.save()
         return JsonResponse({"message": "Registered successfully!","myStatus":1,"collect_group":request.POST['collect_group'][0]})
     except Exception as e: 
@@ -191,21 +210,36 @@ def checkSidEid(request):
     return JsonResponse({"message": 'not match',"myStatus":0})
 
 
+def beforeRecogAfterClaiming(request):
+    print request.POST['sid'],'beforeRecogAfterClaiming'
+    registrationRecord = RegistrationRecord.objects.filter(sid=request.POST['sid'])[0]
+    if registrationRecord.recog == 'nil':
+        registrationRecord.access_time = timezone.now()
+        registrationRecord.save()
+        return JsonResponse({"message": "success","myStatus":0})
+    return JsonResponse({"message": "fail","myStatus":1})
+
+
 
 def recog(request):
-    # print 'a'
-    print request.POST['info']
     registrationRecord = RegistrationRecord.objects.filter(sid=request.POST['info'])[0]
     if registrationRecord.recog == 'nil':
+        print request.POST['info'],'is updating recog',request.POST['recog']
         registrationRecord.recog = request.POST['recog']
+        registrationRecord.reg_time = timezone.now()
         registrationRecord.save()
-        # print 'b'
-        return JsonResponse({"message": 'success',"myStatus":0})
+        return JsonResponse({"message": "success","myStatus":0})
     else:
-        # print 'c'
-        return JsonResponse({"message": 'already selected',"myStatus":1})
+        return JsonResponse({"message": "already selected","myStatus":1})
 
-
+def beforerecog(request):
+    print request.session['sid']
+    registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
+    if registrationRecord.recog == 'nil':
+        registrationRecord.access_time = timezone.now()
+        registrationRecord.save()
+        return JsonResponse({"message": "success","myStatus":0})
+    return JsonResponse({"message": "fail","myStatus":1})
 
 
 

@@ -50,6 +50,7 @@ function CheckRequired(event) {
     }
 }
 $(document).ready(function () {
+    // openLoginModal('#loginModal');
     // $('#myform').on('submit', CheckRequired);
     $('input#sid').on('input',function(e){
         formData = getFormData($("#myform"));

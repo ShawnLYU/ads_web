@@ -35,7 +35,45 @@ function getFormData($form){
 
     return indexed_array;
 }
+
+function sleep(miliseconds) {
+    var currentTime = new Date().getTime();
+    while (currentTime + miliseconds >= new Date().getTime()) {
+    }
+}
+
+
 $(document).ready(function(){
+
+$.fn.preBind = function (type, data, fn) {
+    this.each(function () {
+        var $this = $(this);
+
+        $this.bind(type, data, fn);
+
+        var currentBindings = $._data(this, 'events')[type];
+        if ($.isArray(currentBindings)) {
+            currentBindings.unshift(currentBindings.pop());
+        }
+    });
+    return this;
+};
+
+loader = new SVGLoader( document.getElementById( 'loader' ), { speedIn : 100 } );
+// 
+$('#_next').preBind('click', function() {
+    loader.show();
+    // loader.delay(5000).hide();
+    setTimeout( function() {
+        loader.hide();
+    }, 5000 );
+});
+$('#_prev').preBind('click', function() {
+    loader.show();
+    setTimeout( function() {
+        loader.hide();
+    }, 5000 );
+});
     // start exp
     ads=[8,9,17,18]
     exp_data={}

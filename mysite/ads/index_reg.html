@@ -25,6 +25,12 @@
         <link href="/static/mooncake/css/recog.css" rel="stylesheet">
 
 
+
+
+
+    <link rel="stylesheet" type="text/css" href="/static/mooncake/page-loading/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="/static/mooncake/page-loading/css/component.css" />
+
         <!-- Bootstrap core JavaScript -->
         <script src="/static/mooncake/vendor/jquery/jquery.min.js"></script>
         <script src="/static/mooncake/vendor/popper/popper.min.js"></script>
@@ -34,10 +40,14 @@
         
         <script src="/static/mooncake/break-animate/js/index.js"></script>
         <script src="/static/mooncake/auto-typing/js/index.js"></script>
+        <script src="/static/mooncake/page-loading/js/classie.js"></script>
+        <script src="/static/mooncake/page-loading/js/svgLoader.js"></script>
+        <script src="/static/mooncake/page-loading/js/snap.svg-min.js"></script>
+
     </head>
 
-  <body>
-
+  <body >
+<div id='pagewrap'>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
@@ -45,7 +55,7 @@
 <!--         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
- -->        <div class="collapse navbar-collapse" id="navbarResponsive">
+ -->    <div class="collapse navbar-collapse" id="navbarResponsive">
         </div>
       </div>
     </nav>
@@ -66,11 +76,11 @@
          
 
         </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" id='_prev'>
+        <a class="carousel-control-prev pageload-link" href="#carouselExampleIndicators" role="button" data-slide="prev" id='_prev'>
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="sr-only">Previous</span>
         </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" id='_next'>
+        <a class="carousel-control-next pageload-link" href="#carouselExampleIndicators" role="button"  data-slide="next" id='_next'>
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="sr-only">Next</span>
         </a>
@@ -94,7 +104,7 @@
       </div>
       <!-- /.container -->
     </footer>
-
+</div> <!-- pageWrap -->
 <!-- Modal -->
 <div id='ads_modals'>
 
@@ -242,7 +252,11 @@
         </div>
     </div>
 </div>
-
+      <div id="loader" class="pageload-overlay" data-opening="M20,15 50,30 50,30 30,30 Z;M0,0 80,0 50,30 20,45 Z;M0,0 80,0 60,45 0,60 Z;M0,0 80,0 80,60 0,60 Z" data-closing="M0,0 80,0 60,45 0,60 Z;M0,0 80,0 50,30 20,45 Z;M20,15 50,30 50,30 30,30 Z;M30,30 50,30 50,30 30,30 Z">
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 80 60" preserveAspectRatio="none">
+          <path d="M30,30 50,30 50,30 30,30 Z"/>
+        </svg>
+      </div><!-- /pageload-overlay -->
 
 
 <script type="text/javascript">

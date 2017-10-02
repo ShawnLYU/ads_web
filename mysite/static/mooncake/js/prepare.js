@@ -36,7 +36,6 @@ function getFormData($form){
     return indexed_array;
 }
 $(document).ready(function(){
-    // autoType(".type-js",10);
     // start exp
     ads=[8,9,17,18]
     exp_data={}
@@ -58,12 +57,23 @@ $(document).ready(function(){
         // generateForm();
         generateFormPop();
         // submitting the form
+        
+        $('#tipsSubmit').click(function(){
+            $.ajax({
+                url: '/mooncake/beforerecog/',
+                type: 'POST',
+                dataType: "json",
+                data : exp_data
+            });
+            $('#recogTipsModal').modal('hide');
+            openLoginModal('#recogModal');
+        })
         $('#fake_submit').click(function(){
             if(exp_data['collect_group'] == 1){
-                openLoginModal('#recogModal');
+                openLoginModal('#recogTipsModal');
             }
             else{
-                                formData = getFormData($("#myform"));
+                formData = getFormData($("#myform"));
                 formData['access_time'] = exp_data['access_time']
                 formData['img_seq'] = exp_data['img_seq'].toString()
                 formData['collect_group'] = exp_data['collect_group']
@@ -218,7 +228,7 @@ $(document).ready(function(){
                 toggleAdsModal("ads_modal_"+exp_data['img_seq'][exp_data['img_seq'].length-1]);
             }
         }else{
-            autoType(".type-js",10, $('div.carousel-item.active').index()+1);
+            // autoType(".type-js",10, $('div.carousel-item.active').index()+1);
             $('#_next').show();
             $('#_prev').show();
         }
@@ -232,7 +242,7 @@ $(document).ready(function(){
         if($('div.carousel-item.active').index() === 1){
             $('#_prev').hide();
         }else{
-            autoType(".type-js",10, $('div.carousel-item.active').index()-1);
+            // autoType(".type-js",10, $('div.carousel-item.active').index()-1);
             $('#_next').show();
             $('#_prev').show();
         }
@@ -257,7 +267,7 @@ function generateAds(seq,words){
     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
     // strVar += "     <h3>Third Slide<\/h3>";
     strVar += "<div class=\"type-js headline\">";
-    strVar += "     <p class='text-js'>" + words[mooncakes[0]] + "<\/p>";
+    // strVar += "     <p class='text-js'>" + words[mooncakes[0]] + "<\/p>";
     strVar += " <\/div>";
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
@@ -268,7 +278,7 @@ function generateAds(seq,words){
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
         strVar += "<div class=\"type-js headline\">";
-        strVar += "     <p class='text-js'>" + words[mooncakes[i]] + "<\/p>";
+        // strVar += "     <p class='text-js'>" + words[mooncakes[i]] + "<\/p>";
         strVar += " <\/div>";
         strVar += " <\/div>";
         strVar += "<\/div>  "; 
@@ -289,7 +299,7 @@ function generateSoc(seq, words){
     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
     // strVar += "     <h3>Third Slide<\/h3>";
     strVar += "<div class=\"type-js headline\">";
-    strVar += "     <p class='text-js'>" + words[seq[0]] + "<\/p>";
+    // strVar += "     <p class='text-js'>" + words[seq[0]] + "<\/p>";
     strVar += " <\/div>";
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
@@ -300,7 +310,7 @@ function generateSoc(seq, words){
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
         strVar += "<div class=\"type-js headline\">";
-        strVar += "     <p class='text-js'>" + words[seq[i]] + "<\/p>";
+        // strVar += "     <p class='text-js'>" + words[seq[i]] + "<\/p>";
         strVar += " <\/div>";
         strVar += " <\/div>";
         strVar += "<\/div>  "; 

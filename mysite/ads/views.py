@@ -100,6 +100,7 @@ def initializeExp(request):
         RegistrationRecord.objects.create(sid=request.session['sid'])
         registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
         this_id = registrationRecord.id % 12
+        print this_id
         '''
         this_id = [0,1,2,...,11]
         group index defined
@@ -110,23 +111,26 @@ def initializeExp(request):
 
         '''
         data['exp_group'] = this_id % 4 + 1 # starting from 1
-        # data['collect_group'] = 1 if this_id < 4 else 2 if this_id < 8 else 3
-        data['collect_group'] = 1
+        data['collect_group'] = 1 if this_id < 4 else 2 if this_id < 8 else 3
+        # data['collect_group'] = 1
         # data['exp_group'] = unix_time_millis(timeAccessed) % 4 + 1 # starting from 1
         # data['collect_group'] = unix_time_millis(timeAccessed) % 3 + 1 # starting from 1
 
         if data['exp_group'] == 1:
-            data['img_seq'] = mixLists(range(1,8), [8,9])
+            data['img_seq'] = range(1,8)
+            random.shuffle(data['img_seq'])
+            data['img_seq'] += [8,9]
         elif data['exp_group'] == 2:
             data['img_seq'] = mixLists(range(1,6), random.sample(range(10,17),2))
         elif data['exp_group'] == 3:
-            data['img_seq'] = mixLists(range(1,8), [17,18])
+            data['img_seq'] = range(1,8)
+            random.shuffle(data['img_seq'])
+            data['img_seq'] += random.shuffle([17,18])
         elif data['exp_group'] == 4:
             data['img_seq'] = mixLists(range(1,6), random.sample(range(19,26),2))
-        elif data['exp_group'] == 5:
-            img_seq = range(1,8)
-            random.shuffle(img_seq)
-            data['img_seq'] = img_seq
+
+
+
         # data['access_time'] = timeAccessed.strftime(static.datetime_format)
 
         

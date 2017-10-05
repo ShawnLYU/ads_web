@@ -43,7 +43,13 @@ function sleep(miliseconds) {
 }
 
 
+
+
+var collect_time_1 = '2017-10-1 19:00 - 21:00'
+var collect_time_2 = '2017-10-2 19:00 - 21:00'
+var collect_time_3 = '2017-10-3 19:00 - 21:00'
 $(document).ready(function(){
+
 
 $.fn.preBind = function (type, data, fn) {
     this.each(function () {
@@ -77,6 +83,8 @@ $('#_prev').preBind('click', function() {
     // start exp
     ads=[8,9,17,18]
     exp_data={}
+    myVar=0;
+    isToggled=false;
     $.ajax({
         url: '/mooncake/initializeExp/',
         dataType: 'json'
@@ -84,14 +92,20 @@ $('#_prev').preBind('click', function() {
         // console.log(data);
         // console.log(data['img_seq']);
         exp_data = data;
+        myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
         if(data['collect_group'] != 1){
             $('#water-select').hide();
         }
-        if(data['exp_group'] === 1 ||  data['exp_group'] === 3){
-            generateAds(data['img_seq'],data['words']);
-        }else{
-            generateSoc(data['img_seq'],data['words']);
+        generateImg(data['img_seq'].slice(0,7));
+        if(exp_data['exp_group'] == 1 || exp_data['exp_group']==3){
+            generateAdsModal(exp_data['img_seq'].slice(7,9));
         }
+        
+        // if(data['exp_group'] === 1 ||  data['exp_group'] === 3){
+        //     generateAds(data['img_seq'],data['words']);
+        // }else{
+        //     generateSoc(data['img_seq'],data['words']);
+        // }
         // generateForm();
         generateFormPop();
         // submitting the form
@@ -106,9 +120,20 @@ $('#_prev').preBind('click', function() {
             $('#recogTipsModal').modal('hide');
             openLoginModal('#recogModal');
         })
+        
+        $('#signup').click(function(){
+            openLoginModal('#loginModal');
+            if(exp_data['exp_group'] == 1 || exp_data['exp_group']==3){
+                toggleAdsModal("ads_modal_"+exp_data['img_seq'][8]);
+            }
+
+        })
         $('#fake_submit').click(function(){
+
             if(exp_data['collect_group'] == 1){
+                $("#loginModal").modal('hide');
                 openLoginModal('#recogTipsModal');
+
             }
             else{
                 formData = getFormData($("#myform"));
@@ -124,6 +149,7 @@ $('#_prev').preBind('click', function() {
                     data : formData
                 }).done(function(callback){
                     console.log(callback['myStatus']);
+                    openLoginModal('#loginModal');
                     if(callback['myStatus']==2){
                         // $("#exampleModalLabel").text('');
                         // $("#exampleModalLabel").text('Registration Failed!');
@@ -136,13 +162,13 @@ $('#_prev').preBind('click', function() {
                         var collect_time;
                         switch(callback['collect_group']){
                             case '1':
-                                collect_time = '2017-10-1 19:00 - 21:00'
+                                collect_time = collect_time_1
                                 break;
                             case '2':
-                                collect_time = '2017-10-2 19:00 - 21:00'
+                                collect_time = collect_time_2
                                 break;
                             case '3':
-                                collect_time = '2017-10-3 19:00 - 21:00'
+                                collect_time = collect_time_3
                                 break;
                         }
                         // $("#exampleModalLabel").text('');
@@ -157,13 +183,13 @@ $('#_prev').preBind('click', function() {
                         var collect_time;
                         switch(callback['collect_group']){
                             case '1':
-                                collect_time = '2017-10-1 19:00 - 21:00'
+                                collect_time = collect_time_1
                                 break;
                             case '2':
-                                collect_time = '2017-10-2 19:00 - 21:00'
+                                collect_time = collect_time_2
                                 break;
                             case '3':
-                                collect_time = '2017-10-3 19:00 - 21:00'
+                                collect_time = collect_time_3
                                 break;
                         }
                         // $("#exampleModalLabel").text('');
@@ -196,6 +222,7 @@ $('#_prev').preBind('click', function() {
                     data : formData
                 }).done(function(callback){
                     console.log(callback['myStatus']);
+                    openLoginModal('#loginModal');
                     if(callback['myStatus']==2){
                         // $("#exampleModalLabel").text('');
                         // $("#exampleModalLabel").text('Registration Failed!');
@@ -208,13 +235,13 @@ $('#_prev').preBind('click', function() {
                         var collect_time;
                         switch(callback['collect_group']){
                             case '1':
-                                collect_time = '2017-10-1 19:00 - 21:00'
+                                collect_time = collect_time_1
                                 break;
                             case '2':
-                                collect_time = '2017-10-2 19:00 - 21:00'
+                                collect_time = collect_time_2
                                 break;
                             case '3':
-                                collect_time = '2017-10-3 19:00 - 21:00'
+                                collect_time = collect_time_3
                                 break;
                         }
                         // $("#exampleModalLabel").text('');
@@ -229,13 +256,13 @@ $('#_prev').preBind('click', function() {
                         var collect_time;
                         switch(callback['collect_group']){
                             case '1':
-                                collect_time = '2017-10-1 19:00 - 21:00'
+                                collect_time = collect_time_1
                                 break;
                             case '2':
-                                collect_time = '2017-10-2 19:00 - 21:00'
+                                collect_time = collect_time_2
                                 break;
                             case '3':
-                                collect_time = '2017-10-3 19:00 - 21:00'
+                                collect_time = collect_time_3
                                 break;
                         }
                         // $("#exampleModalLabel").text('');
@@ -259,24 +286,41 @@ $('#_prev').preBind('click', function() {
 
     $('#_prev').hide();
     $('#_next').click(function(){
+        if($('div.carousel-item.active').index() === 0){
+            if(exp_data['exp_group']==1||exp_data['exp_group']==3){
+                if(!isToggled){
+                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+                    clearTimeout(myVar);
+                }
+                // myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
+                              
+            }
+
+        }
+
         
         if($('div.carousel-item.active').index() === $('div.carousel-item').length-2){
             $('#_next').hide();
-            if(ads.indexOf(exp_data['img_seq'][exp_data['img_seq'].length-1])!=-1){
-                toggleAdsModal("ads_modal_"+exp_data['img_seq'][exp_data['img_seq'].length-1]);
-            }
+            // if(ads.indexOf(exp_data['img_seq'][exp_data['img_seq'].length-1])!=-1){
+            //     toggleAdsModal("ads_modal_"+exp_data['img_seq'][exp_data['img_seq'].length-1]);
+            // }
         }else{
             // autoType(".type-js",10, $('div.carousel-item.active').index()+1);
             $('#_next').show();
             $('#_prev').show();
         }
-        if(ads.indexOf(exp_data['img_seq'][$('div.carousel-item.active').index()+1])!=-1){
-            toggleAdsModal("ads_modal_"+exp_data['img_seq'][$('div.carousel-item.active').index()+1]);
-        }
+        // if(ads.indexOf(exp_data['img_seq'][$('div.carousel-item.active').index()+1])!=-1){
+        //     toggleAdsModal("ads_modal_"+exp_data['img_seq'][$('div.carousel-item.active').index()+1]);
+        // }
 
     });
     $('#_prev').click(function(){
-        
+        if($('div.carousel-item.active').index() === 1){
+            if(exp_data['exp_group']==1||exp_data['exp_group']==3){
+                isToggled=false;
+                myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
+            }
+        }
         if($('div.carousel-item.active').index() === 1){
             $('#_prev').hide();
         }else{
@@ -292,57 +336,83 @@ $('#_prev').preBind('click', function() {
 
 });
 
-function generateAds(seq,words){
-    // place mooncakes first
-    Array.prototype.diff = function(a) {
-        return this.filter(function(i) {return a.indexOf(i) < 0;});
-    };
-    // Fixed: images with index 8,9,12,13 would be ads
-    ads=[8,9,17,18]
-    mooncakes=seq.diff(ads)
-    var strVar="";
-    strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+mooncakes[0]+".jpg')\">";
-    strVar += " <div class=\"carousel-caption d-none d-md-block\">";
-    // strVar += "     <h3>Third Slide<\/h3>";
-    strVar += "<div class=\"type-js headline\">";
-    // strVar += "     <p class='text-js'>" + words[mooncakes[0]] + "<\/p>";
-    strVar += " <\/div>";
-    strVar += " <\/div>";
-    strVar += "<\/div>  "; 
-    $('.carousel-inner').append(strVar);
-    for (var i = 1, len = mooncakes.length; i < len; i++) {
-        var strVar="";
-        strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+mooncakes[i]+".jpg')\">";
-        strVar += " <div class=\"carousel-caption d-none d-md-block\">";
-        // strVar += "     <h3>Third Slide<\/h3>";
-        strVar += "<div class=\"type-js headline\">";
-        // strVar += "     <p class='text-js'>" + words[mooncakes[i]] + "<\/p>";
-        strVar += " <\/div>";
-        strVar += " <\/div>";
-        strVar += "<\/div>  "; 
-        $('.carousel-inner').append(strVar);    
-    }
-    thisAds = ads.diff(ads.diff(seq));
-    generateAdsModal(thisAds);
-    // generateAdsModalWithCountDown(thisAds);
-    // if the first images is ads, toggle it
-    if(ads.indexOf(seq[0])!=-1){
-        toggleAdsModal("ads_modal_"+seq[0]);
-    }
-}
-function generateSoc(seq, words){
+// function generateAds(seq,words){
+//     // place mooncakes first
+//     Array.prototype.diff = function(a) {
+//         return this.filter(function(i) {return a.indexOf(i) < 0;});
+//     };
+//     // Fixed: images with index 8,9,12,13 would be ads
+//     ads=[8,9,17,18]
+//     mooncakes=seq.diff(ads)
+//     var strVar="";
+//     strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+mooncakes[0]+".jpg')\">";
+//     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
+//     // strVar += "     <h3>Third Slide<\/h3>";
+//     strVar += "<div class=\"type-js headline\">";
+//     // strVar += "     <p class='text-js'>" + words[mooncakes[0]] + "<\/p>";
+//     strVar += " <\/div>";
+//     strVar += " <\/div>";
+//     strVar += "<\/div>  "; 
+//     $('.carousel-inner').append(strVar);
+//     for (var i = 1, len = mooncakes.length; i < len; i++) {
+//         var strVar="";
+//         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+mooncakes[i]+".jpg')\">";
+//         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
+//         // strVar += "     <h3>Third Slide<\/h3>";
+//         strVar += "<div class=\"type-js headline\">";
+//         // strVar += "     <p class='text-js'>" + words[mooncakes[i]] + "<\/p>";
+//         strVar += " <\/div>";
+//         strVar += " <\/div>";
+//         strVar += "<\/div>  "; 
+//         $('.carousel-inner').append(strVar);    
+//     }
+//     thisAds = ads.diff(ads.diff(seq));
+//     generateAdsModal(thisAds);
+//     // generateAdsModalWithCountDown(thisAds);
+//     // if the first images is ads, toggle it
+//     if(ads.indexOf(seq[0])!=-1){
+//         toggleAdsModal("ads_modal_"+seq[0]);
+//     }
+// }
+// function generateSoc(seq, words){
 
-    var strVar="";
-    strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[0]+".jpg')\">";
-    strVar += " <div class=\"carousel-caption d-none d-md-block\">";
-    // strVar += "     <h3>Third Slide<\/h3>";
-    strVar += "<div class=\"type-js headline\">";
-    // strVar += "     <p class='text-js'>" + words[seq[0]] + "<\/p>";
-    strVar += " <\/div>";
-    strVar += " <\/div>";
-    strVar += "<\/div>  "; 
-    $('.carousel-inner').append(strVar);
-    for (var i = 1, len = seq.length; i < len; i++) {
+//     var strVar="";
+//     strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[0]+".jpg')\">";
+//     strVar += " <div class=\"carousel-caption d-none d-md-block\">";
+//     // strVar += "     <h3>Third Slide<\/h3>";
+//     strVar += "<div class=\"type-js headline\">";
+//     // strVar += "     <p class='text-js'>" + words[seq[0]] + "<\/p>";
+//     strVar += " <\/div>";
+//     strVar += " <\/div>";
+//     strVar += "<\/div>  "; 
+//     $('.carousel-inner').append(strVar);
+//     for (var i = 1, len = seq.length; i < len; i++) {
+//         var strVar="";
+//         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[i]+".jpg')\">";
+//         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
+//         // strVar += "     <h3>Third Slide<\/h3>";
+//         strVar += "<div class=\"type-js headline\">";
+//         // strVar += "     <p class='text-js'>" + words[seq[i]] + "<\/p>";
+//         strVar += " <\/div>";
+//         strVar += " <\/div>";
+//         strVar += "<\/div>  "; 
+//         $('.carousel-inner').append(strVar);    
+//     }
+// }
+
+function generateImg(seq){
+
+    // var strVar="";
+    // strVar += "<div class=\"carousel-item active\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[0]+".jpg')\">";
+    // strVar += " <div class=\"carousel-caption d-none d-md-block\">";
+    // // strVar += "     <h3>Third Slide<\/h3>";
+    // strVar += "<div class=\"type-js headline\">";
+    // // strVar += "     <p class='text-js'>" + words[seq[0]] + "<\/p>";
+    // strVar += " <\/div>";
+    // strVar += " <\/div>";
+    // strVar += "<\/div>  "; 
+    // $('.carousel-inner').append(strVar);
+    for (var i = 0, len = seq.length; i < len; i++) {
         var strVar="";
         strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[i]+".jpg')\">";
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
@@ -359,7 +429,7 @@ function generateFormPop(){
     var strVar="";
     strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/legend-of-midautumn-1.jpg')\">";
     strVar += " <div class=\"carousel-caption d-md-block\" style=\"bottom:20%;\">";
-    strVar += "     <button type=\"button\" class=\"btn btn-outline-warning btn-lg\" onclick=\"openLoginModal('#loginModal');\">Sign Up Now!<\/button>";
+    strVar += "     <button type=\"button\" id=\"signup\" class=\"btn btn-outline-warning btn-lg\" >Sign Up Now!<\/button>";
     strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
     strVar += " <\/div>";
     strVar += "<\/div>  "; 

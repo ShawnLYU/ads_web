@@ -30,7 +30,7 @@
 
 	SVGLoader.prototype.options = {
 		speedIn : 500,
-		easingIn : mina.linear
+		// easingIn : mina.linear
 	}
 
 	SVGLoader.prototype._init = function() {

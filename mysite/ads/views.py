@@ -12,6 +12,7 @@ from django.http import JsonResponse
 import random
 import datetime
 import static
+from static import prepare_img
 from django.utils import timezone
 
 # from django.views.decorators.csrf import csrf_exempt
@@ -110,24 +111,33 @@ def initializeExp(request):
         collect_3   8   9   10  11
 
         '''
+        # print this_id % 4 + 1
         data['exp_group'] = this_id % 4 + 1 # starting from 1
         data['collect_group'] = 1 if this_id < 4 else 2 if this_id < 8 else 3
+        # print data['collect_group']
         # data['collect_group'] = 1
         # data['exp_group'] = unix_time_millis(timeAccessed) % 4 + 1 # starting from 1
         # data['collect_group'] = unix_time_millis(timeAccessed) % 3 + 1 # starting from 1
-
-        if data['exp_group'] == 1:
-            data['img_seq'] = range(1,8)
-            random.shuffle(data['img_seq'])
+        pick_out = prepare_img()
+        base_pics = range(1,8)
+        #aad
+        if data['exp_group'] == 1: 
+            data['img_seq'] = range(1,8) - pick_out
             data['img_seq'] += [8,9]
-        elif data['exp_group'] == 2:
-            data['img_seq'] = mixLists(range(1,6), random.sample(range(10,17),2))
-        elif data['exp_group'] == 3:
+        #aso
+        elif data['exp_group'] == 2: 
+            for i in pick_out:
+                base_pics = [i+9 if x==i else x for x in base_pics]
+            data['img_seq'] = base_pics
+        #bad
+        elif data['exp_group'] == 3: 
             data['img_seq'] = range(1,8)
-            random.shuffle(data['img_seq'])
-            data['img_seq'] += random.shuffle([17,18])
-        elif data['exp_group'] == 4:
-            data['img_seq'] = mixLists(range(1,6), random.sample(range(19,26),2))
+            data['img_seq'] += [17,18]
+        #bso
+        elif data['exp_group'] == 4: 
+            for i in pick_out:
+                base_pics = [i+18 if x==i else x for x in base_pics]
+            data['img_seq'] = base_pics
 
 
 

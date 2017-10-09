@@ -92,7 +92,10 @@ $('#_prev').preBind('click', function() {
         // console.log(data);
         // console.log(data['img_seq']);
         exp_data = data;
-        myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
+        if(exp_data['exp_group']==1||exp_data['exp_group']==3){
+            myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
+        }
+        
         if(data['collect_group'] != 1){
             $('#water-select').hide();
         }

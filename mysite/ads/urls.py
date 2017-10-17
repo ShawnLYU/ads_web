@@ -35,4 +35,5 @@ urlpatterns = [
     url(r'^mooncake/recog/$', recog),
     url(r'^mooncake/beforerecog/$', beforerecog),
     url(r'^mooncake/beforeRecogAfterClaiming/$', beforeRecogAfterClaiming),
+    url(r'^mooncake/form/$', form),
 ]

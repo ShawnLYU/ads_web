@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sign In</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="/static/mooncake/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/mooncake/css/signin.css" rel="stylesheet">
+  </head>
+  <body>
+    
+    <div class="container">
+
+      <form class="form-signin" id="myform" action='/mooncake/home/' method="post">
+        {% csrf_token %}
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <label for="sid" class="sr-only">SID</label>
+        <input type="number" id="sid" class="form-control" placeholder="SID" required autofocus>
+        <label for="name" class="sr-only">EID</label>
+        <input type="text" id="name" class="form-control" placeholder="EID" required>
+        <div class="checkbox">
+
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+
+    </div> <!-- /container -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="/static/mooncake/vendor/jquery/jquery.min.js"></script>
+        <script src="/static/mooncake/vendor/popper/popper.min.js"></script>
+        <script src="/static/mooncake/vendor/bootstrap/js/bootstrap.js"></script>
+        <script src="/static/mooncake/js/notify.js"></script>
+        <script src="/static/mooncake/js/signin.js"></script>
+  </body>
+  <script type="text/javascript">
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+</script>
+</html>

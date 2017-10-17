@@ -36,10 +36,10 @@
         <script src="/static/mooncake/vendor/popper/popper.min.js"></script>
         <script src="/static/mooncake/vendor/bootstrap/js/bootstrap.js"></script>
         <script src="/static/mooncake/js/prepare.js"></script>
-        <script src="/static/mooncake/js/tracking.js"></script>
         
-        <script src="/static/mooncake/break-animate/js/index.js"></script>
-        <script src="/static/mooncake/auto-typing/js/index.js"></script>
+        
+        
+        
         <script src="/static/mooncake/page-loading/js/classie.js"></script>
         <script src="/static/mooncake/page-loading/js/svgLoader.js"></script>
         <script src="/static/mooncake/page-loading/js/snap.svg-min.js"></script>
@@ -48,17 +48,6 @@
 
   <body >
 <div id='pagewrap'>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="/mooncake/home/" id='weirdtext'>Moon cake delivery</a>
-<!--         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
- -->    <div class="collapse navbar-collapse" id="navbarResponsive">
-        </div>
-      </div>
-    </nav>
 
     <header>
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -74,34 +63,32 @@
           <li data-target="#carouselExampleIndicators" ></li>
         </ol>
         <div class="carousel-inner" role="listbox">
-          <div class="carousel-item active" style="background-image: url('/static/mooncake/media/legend-of-midautumn-1.jpg')">
+          <div class="carousel-item active" style="background-image: url('/static/mooncake/media/v2.jpg')">
            <div class="carousel-caption d-none d-md-block">
-               <h3>Third Slide</h3>
-               <p class='text-js'> </p>
+            <a href="#carouselExampleIndicators" role="button"  id='nextbutton'>
+               <button type="button" id="countdown" disabled class="btn btn-lg btn-primary">Go in 5 s
+               </button>
+               </a>
+
            </div>
            </div>
           </div>  
 
         </div>
-        <a class="carousel-control-prev pageload-link" href="#carouselExampleIndicators" role="button" data-slide="prev" id='_prev'>
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+<!--         <a class="carousel-control-prev pageload-link" href="#carouselExampleIndicators" role="button"  id='_prev'>
+          <span class="carousel-control-prev-icon" aria-hidden="true" style="background-image:url('/static/mooncake/media/left.png')"></span>
           <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next pageload-link" href="#carouselExampleIndicators" role="button"  data-slide="next" id='_next'>
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
+        </a> -->
+        <div id='nav_button'>
+          <a class="carousel-control-next pageload-link" href="#carouselExampleIndicators" role="button"   id='_next'>
+            <span class="carousel-control-next-icon" aria-hidden="true" style="background-image:url('/static/mooncake/media/right_v2.png');width: 50px;height: 50px;"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+
       </div>
     </header>
 
-    <!-- Page Content -->
-    <section class="py-5">
-      <div class="container">
-        <h1>Get one free moon cake for FREE !!!</h1>
-        <p>Each LSK resident could get a moon cake freely for Mid-autumn festival.</p>
-        <p>Registration is available in the <b>LAST PAGE</b>.</p>
-      </div>
-    </section>
 
     <!-- Footer -->
     <footer class="py-5 bg-dark">
@@ -156,9 +143,9 @@
                             <div class="form-group">
                                 <label for="cake">Cake list:</label>
                                 <select class="form-control" form='myform' id='cake' name='cake'>
-                                    <option value='cake1'>cake1</option>
-                                    <option value='cake2'>cake2</option>
-                                    <option value='cake3'>cake3</option>
+                                    <option value='arome'>Arome</option>
+                                    <option value='keewah'>Kee Wah</option>
+                                    <option value='wingwah'>Wing Wah</option>
                                 </select>
                             </div>
                             <div id='water-select'>
@@ -168,17 +155,17 @@
                                     <div class="line r"></div>
                                 </div>
                                 <div class="social">
-                                    <img class="img-circle" src="/static/mooncake/media/bonaque.jpg">
-                                    <img class="img-circle" src="/static/mooncake/media/watson.jpg">
+                                    <img class="img-circle" src="/static/mooncake/media/producta.jpg">
+                                    <img class="img-circle" src="/static/mooncake/media/productb.jpg">
                                 </div>
                                 <div class="form-group">
                                     <select class="form-control" form='myform' id='water' name='water'>
-                                        <option value='bonaque'>Bonaque</option>
-                                        <option value='watson'>Watson</option>
+                                        <option value='producta'>willow</option>
+                                        <option value='productb'>fONT DOR</option>
                                     </select>
                                 </div>
                             </div>
-                            <input class="btn btn-default btn-login" type="button" value="Submit" id='fake_submit'>
+                            <input class="btn btn-default btn-login" type="button" value="Next" id='fake_submit'>
                             </form>
                         </div>
                      </div>
@@ -204,19 +191,29 @@
                             <div id='water-select'>
                                 <div class="division">
                                     
-                                      <span>Choose the one that you've seen in the previous images</span>
+                                      <span>Click the one that you've seen in the previous images</span>
                                     
                                 </div>
                                 <div class="social">
                                   <label>
-                                    <input type="radio" name="fb" value='bonaque' checked/>
-                                    <img class="img-circle" src="/static/mooncake/media/bonaque.jpg">
+                                    <input type="radio" name="fb" value='producta'/>
+                                    <img class="img-circle" src="/static/mooncake/media/producta.jpg">
                                   </lable>
                                   <label>
-                                    <input type="radio" name="fb" value='watson'/>
-                                    <img class="img-circle" src="/static/mooncake/media/watson.jpg">
+                                    <input type="radio" name="fb" value='productb'/>
+                                    <img class="img-circle" src="/static/mooncake/media/productb.jpg">
                                   </lable>
-                                    
+ 
+                                </div>
+                                <div class='social'>
+                                 <label>
+                                    <input type="radio" name="fb" value='productc'/>
+                                    <img class="img-circle" src="/static/mooncake/media/productc.jpg">
+                                  </lable>
+                                  <label>
+                                    <input type="radio" name="fb" value='productd'/>
+                                    <img class="img-circle" src="/static/mooncake/media/productd.jpg">
+                                  </lable>
                                 </div>
                             </div>
                             <input class="btn btn-default btn-login" type="button" value="Submit" id='submit'>
@@ -251,6 +248,30 @@
                                 </div>
                             </div>
                             <input class="btn btn-default btn-login" type="button" value="Ready!" id='tipsSubmit'>
+                            </form>
+                        </div>
+                     </div>
+                </div>
+            </div>       
+        </div>
+    </div>
+</div>
+ <div class="modal fade login" id="confirmModal">
+      <div class="modal-dialog login animated">
+          <div class="modal-content">
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Registration form</h4>
+            </div>
+            <div class="modal-body">  
+                <div class="box">
+                     <div class="content">
+                        <div class="error"></div>
+                        <div class="form loginBox">
+                            <form method="post" id='myform' accept-charset="UTF-8">
+
+
+                            <input class="btn btn-default btn-login" type="button" value="Return to index" onclick='window.location.replace("http://dl380a.cs.cityu.edu.hk/mooncake/");'>
                             </form>
                         </div>
                      </div>

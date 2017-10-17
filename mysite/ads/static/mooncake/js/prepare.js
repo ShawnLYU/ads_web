@@ -18,11 +18,11 @@ function openLoginModal(id){
     
 }
 function shakeModal(){
-    $('#loginModal .modal-dialog').addClass('shake');
-            // $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
-            setTimeout( function(){ 
-                $('#loginModal .modal-dialog').removeClass('shake'); 
-    }, 1000 ); 
+    // $('#confirmModal .modal-dialog').addClass('shake');
+    //         // $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
+    //         setTimeout( function(){ 
+    //             $('#confirmModal .modal-dialog').removeClass('shake'); 
+    // }, 1000 ); 
 }
 
 function getFormData($form){
@@ -41,45 +41,145 @@ function sleep(miliseconds) {
     while (currentTime + miliseconds >= new Date().getTime()) {
     }
 }
+(function(){
+    // Your base, I'm in it!
+    var originalAddClassMethod = jQuery.fn.addClass;
+
+    jQuery.fn.addClass = function(){
+        // Execute the original method.
+        var result = originalAddClassMethod.apply( this, arguments );
+
+        // trigger a custom event
+        jQuery(this).trigger('cssClassChanged');
+
+        // return the original result
+        return result;
+    }
+})();
 
 
+// var showLoadingEffect = function(){
+//     var dfrd1 = $.Deferred();
+//     loader = new SVGLoader( document.getElementById( 'loader' ), { speedIn : 100 } );
+//     loader.show();
+//     setTimeout( function() {
+//         loader.hide();
+//         dfrd1.resolve();
+//     }, 5000 );
+//     return dfrd1.promise();     
 
+// }
+var social = []
 
 var collect_time_1 = '2017-10-1 19:00 - 21:00'
 var collect_time_2 = '2017-10-2 19:00 - 21:00'
 var collect_time_3 = '2017-10-3 19:00 - 21:00'
+var pages=[false,false,false,false,false,false,false,false,false];
+var isNext = false;
+function showLoandingEffectNext(){
+    ind = $('div.carousel-item.active').index();
+    if(pages[ind]==false){
+        if(ind > 0 && exp_data['img_seq'][ind-1]>7){
+            $("#_next").bind('click', false);
+            loader.show();
+            pages[ind] = true;
+            setTimeout( function() {
+                loader.hide();
+                $("#_next").unbind('click', false);
+                $("#_next").attr('data-slide','next');
+                $("#_next").trigger('click');
+                $("#_next").removeAttr("data-slide");
+            }, 5000 );  
+        }else{
+            pages[ind] = true;
+            $("#_next").attr('data-slide','next');
+            $("#_next").trigger('click');
+            $("#_next").removeAttr("data-slide");
+        }
+    }
+
+}
+// function showLoandingEffectPrev(){
+//     ind = $('div.carousel-item.active').index();
+//     if(pages[ind]==false){
+//         if(ind>0 && ind <8 && exp_data['img_seq'][ind-1]>7){
+//             $("#_next").bind('click', false);
+//             $("#_prev").bind('click', false);
+//             loader.show();
+//             pages[ind] = true;
+//             setTimeout( function() {
+//                 loader.hide();
+//                 $("#_next").unbind('click', false);
+//                 $("#_prev").unbind('click', false);
+//                 $("#_prev").attr('data-slide','prev');
+//                 $("#_prev").trigger('click');
+//                 $("#_prev").removeAttr("data-slide");
+//                 pages[ind] = false;
+//             }, 5000 );  
+//         }else{
+//             pages[ind] = true
+//             $("#_prev").attr('data-slide','prev');
+//             $("#_prev").trigger('click');
+//             pages[ind] = false;
+//             $("#_prev").removeAttr("data-slide");
+//         }
+//     }
+
+// }
 $(document).ready(function(){
 
 
-$.fn.preBind = function (type, data, fn) {
-    this.each(function () {
-        var $this = $(this);
-
-        $this.bind(type, data, fn);
-
-        var currentBindings = $._data(this, 'events')[type];
-        if ($.isArray(currentBindings)) {
-            currentBindings.unshift(currentBindings.pop());
+    // pointer show or hide
+    $("li").bind('cssClassChanged', function(){ 
+        if($('div.carousel-item.active').index()==0){
+            $('#_next').show();
+        }       
+        if($('div.carousel-item.active').index()==7){
+            $('#_next').hide();
         }
+        if($('div.carousel-item.active').index() === 0){
+            if(exp_data['exp_group']==1||exp_data['exp_group']==3){
+                if(!isToggled){
+                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+                    clearTimeout(myVar);
+                }
+            }
+        }
+        formData={};
+        formData['img_index'] = $('div.carousel-item.active').index()+1;
+        $.ajax({
+            url: '/mooncake/tracking/',
+            data:formData,
+            type: "POST",
+            dataType: "json",
+        }).done(function(data){
+            console.log(data);
+        });
     });
-    return this;
-};
+    $("#_next").hide();
+    var countDownDate = 5;
+    var x = setInterval(function() {
 
-loader = new SVGLoader( document.getElementById( 'loader' ), { speedIn : 100 } );
-// 
-$('#_next').preBind('click', function() {
-    loader.show();
-    // loader.delay(5000).hide();
-    setTimeout( function() {
-        loader.hide();
-    }, 5000 );
-});
-$('#_prev').preBind('click', function() {
-    loader.show();
-    setTimeout( function() {
-        loader.hide();
-    }, 5000 );
-});
+      // Find the distance between now an the count down date
+      countDownDate = countDownDate - 1;
+      // Display the result in the element with id="demo"
+      document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
+
+      // If the count down is finished, write some text 
+      if (countDownDate < 1) {
+        clearInterval(x);
+        document.getElementById("countdown").innerHTML = "Next";
+        $("#countdown").prop("disabled", false);
+        $("#nextbutton").attr('data-slide','next');
+      }
+    }, 1000);
+
+
+
+
+
+    loader = new SVGLoader( document.getElementById( 'loader' ), { speedIn : 100 } );
+
     // start exp
     ads=[8,9,17,18]
     exp_data={}
@@ -92,13 +192,20 @@ $('#_prev').preBind('click', function() {
         // console.log(data);
         // console.log(data['img_seq']);
         exp_data = data;
+        for (i = 0; i < 7; i++) {
+            if(exp_data['img_seq'][i]>7){
+                social.push(i);
+            }
+        }
+
         if(exp_data['exp_group']==1||exp_data['exp_group']==3){
-            myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
+            $("#_next").attr('data-slide','next');
+            myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 10000);
         }
         
-        if(data['collect_group'] != 1){
-            $('#water-select').hide();
-        }
+        // if(data['collect_group'] != 1){
+        //     $('#water-select').hide();
+        // }
         generateImg(data['img_seq'].slice(0,7));
         if(exp_data['exp_group'] == 1 || exp_data['exp_group']==3){
             generateAdsModal(exp_data['img_seq'].slice(7,9));
@@ -125,10 +232,19 @@ $('#_prev').preBind('click', function() {
         })
         
         $('#signup').click(function(){
-            openLoginModal('#loginModal');
+            // openLoginModal('#loginModal');
             if(exp_data['exp_group'] == 1 || exp_data['exp_group']==3){
-                toggleAdsModal("ads_modal_"+exp_data['img_seq'][8]);
+                if(isNext==false){ 
+                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][8]);
+                    isNext = true;
+                }else{
+                    window.location.replace("http://localhost:8000/mooncake/form");
+                }
+            }else{
+                window.location.replace("http://localhost:8000/mooncake/form");
             }
+
+
 
         })
         $('#fake_submit').click(function(){
@@ -151,8 +267,9 @@ $('#_prev').preBind('click', function() {
                     dataType: "json",
                     data : formData
                 }).done(function(callback){
+                    $("#loginModal").modal('hide');
                     console.log(callback['myStatus']);
-                    openLoginModal('#loginModal');
+                    openLoginModal('#confirmModal');
                     if(callback['myStatus']==2){
                         // $("#exampleModalLabel").text('');
                         // $("#exampleModalLabel").text('Registration Failed!');
@@ -217,15 +334,16 @@ $('#_prev').preBind('click', function() {
                 formData['img_seq'] = exp_data['img_seq'].toString()
                 formData['collect_group'] = exp_data['collect_group']
                 formData['exp_group'] = exp_data['exp_group']
-                formData['recog'] = $('#recogForm :input').eq(1).val()
+                formData['recog'] = $('input[name=fb]:checked').val()
                 $.ajax({
                     url: '/mooncake/register/',
                     type: 'POST',
                     dataType: "json",
                     data : formData
                 }).done(function(callback){
+                    $("#loginModal").modal('hide');
                     console.log(callback['myStatus']);
-                    openLoginModal('#loginModal');
+                    openLoginModal('#confirmModal');
                     if(callback['myStatus']==2){
                         // $("#exampleModalLabel").text('');
                         // $("#exampleModalLabel").text('Registration Failed!');
@@ -287,51 +405,42 @@ $('#_prev').preBind('click', function() {
 
 
 
-    $('#_prev').hide();
+    
     $('#_next').click(function(){
-        if($('div.carousel-item.active').index() === 0){
-            if(exp_data['exp_group']==1||exp_data['exp_group']==3){
-                if(!isToggled){
-                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
-                    clearTimeout(myVar);
-                }
-                // myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
-                              
-            }
+        if(exp_data['exp_group']==2||exp_data['exp_group']==4){
+            showLoandingEffectNext();
 
         }
+        // if($('div.carousel-item.active').index() === $('div.carousel-item').length-1){
+        //     // $('#loginModal').modal('show');
+        //     // $("#_next").hide();
+        //     // if(isNext==false){
+        //     //     if(exp_data['exp_group'] == 1 || exp_data['exp_group']==3){
+        //     //         toggleAdsModal("ads_modal_"+exp_data['img_seq'][8]);
+        //     //     }
+        //     //     isNext = true;
+        //     // }else{
 
-        
-        if($('div.carousel-item.active').index() === $('div.carousel-item').length-2){
-            $('#_next').hide();
-            // if(ads.indexOf(exp_data['img_seq'][exp_data['img_seq'].length-1])!=-1){
-            //     toggleAdsModal("ads_modal_"+exp_data['img_seq'][exp_data['img_seq'].length-1]);
-            // }
-        }else{
-            // autoType(".type-js",10, $('div.carousel-item.active').index()+1);
-            $('#_next').show();
-            $('#_prev').show();
-        }
-        // if(ads.indexOf(exp_data['img_seq'][$('div.carousel-item.active').index()+1])!=-1){
-        //     toggleAdsModal("ads_modal_"+exp_data['img_seq'][$('div.carousel-item.active').index()+1]);
+        //     // }
+
+        // }else{
+
         // }
 
     });
-    $('#_prev').click(function(){
-        if($('div.carousel-item.active').index() === 1){
-            if(exp_data['exp_group']==1||exp_data['exp_group']==3){
-                isToggled=false;
-                myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
-            }
-        }
-        if($('div.carousel-item.active').index() === 1){
-            $('#_prev').hide();
-        }else{
-            // autoType(".type-js",10, $('div.carousel-item.active').index()-1);
-            $('#_next').show();
-            $('#_prev').show();
-        }
-    });  
+    // $('#_prev').click(function(){
+    //     if(exp_data['exp_group']==2||exp_data['exp_group']==4){
+    //         showLoandingEffectPrev();
+
+    //     }
+    //     if($('div.carousel-item.active').index() === 1){
+    //         if(exp_data['exp_group']==1||exp_data['exp_group']==3){
+    //             isToggled=false;
+    //             myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 3000);
+    //         }
+    //     }
+
+    // });  
 
 
 

@@ -18,7 +18,14 @@ from django.utils import timezone
 # from django.views.decorators.csrf import csrf_exempt
 
 def login(request):
-    return render(request, "index_signin.html")
+    return render(request, "index_signin_v2.html")
+def form(request):
+    if 'sid' not in request.session.keys():
+        return render(request, "index_signin_v2.html")
+    if request.session['collect_group'] == 1:
+        return render(request, "form.html")
+    else:
+        return render(request, "form_2.html")
 def afterClaiming(request):
     return render(request, "recog.html")
 def prepareInfo(request):
@@ -32,15 +39,15 @@ def home(request):
     # print request.POST
     # print request.POST['sid']
     # print request.POST['name']
-    if 'sid' not in request.POST.keys():
-        return render(request, "index_signin.html")
+    if 'sid' not in request.session.keys():
+        return render(request, "index_signin_v2.html")
     # if RegistrationRecord.objects.filter(sid=request.session['sid']).count() > 0:
     #     registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
     #     if registrationRecord.name != request.POST['name']:
     #         return JsonResponse({"message": 'not match',"myStatus":1})
     # else:
-    request.session['sid'] = request.POST['sid']
-    request.session['name'] = request.POST['name']
+    # request.session['sid'] = request.POST['sid']
+    # request.session['name'] = request.POST['name']
     return render(request, "index_reg.html")
 
 def mixLists(a,b):
@@ -62,7 +69,7 @@ def unix_time_millis(dt):
     return int((dt - epoch).total_seconds() * 1000.0)
 
 def initializeExp(request):
-    # print 'a',request.session['sid']
+    # print 'a',request.session['eid']
     # print RegistrationRecord.objects.filter(sid=request.session['sid'])
     # timeAccessed = datetime.datetime.now()
     # prepare json data for front end
@@ -101,7 +108,8 @@ def initializeExp(request):
         RegistrationRecord.objects.create(sid=request.session['sid'])
         registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
         this_id = registrationRecord.id % 12
-        print this_id
+        #this_id = 0
+        # print 'this_id',this_id
         '''
         this_id = [0,1,2,...,11]
         group index defined
@@ -121,20 +129,20 @@ def initializeExp(request):
         pick_out = prepare_img()
         base_pics = range(1,8)
         #aad
-        if data['exp_group'] == 1: 
-            data['img_seq'] = range(1,8) - pick_out
+        if data['exp_group'] == 1:
+            data['img_seq'] = range(1,8)
             data['img_seq'] += [8,9]
         #aso
-        elif data['exp_group'] == 2: 
+        elif data['exp_group'] == 2:
             for i in pick_out:
                 base_pics = [i+9 if x==i else x for x in base_pics]
             data['img_seq'] = base_pics
         #bad
-        elif data['exp_group'] == 3: 
+        elif data['exp_group'] == 3:
             data['img_seq'] = range(1,8)
             data['img_seq'] += [17,18]
         #bso
-        elif data['exp_group'] == 4: 
+        elif data['exp_group'] == 4:
             for i in pick_out:
                 base_pics = [i+18 if x==i else x for x in base_pics]
             data['img_seq'] = base_pics
@@ -145,7 +153,7 @@ def initializeExp(request):
 
         
         registrationRecord.sid = request.session['sid']
-        registrationRecord.name = request.session['name']
+        registrationRecord.name = request.session['eid']
         registrationRecord.img_seq = data['img_seq']
         # registrationRecord.access_time = timeAccessed
         registrationRecord.collect_group = data['collect_group']
@@ -167,34 +175,37 @@ def initializeExp(request):
         img_seq = registrationRecord.img_seq
         img_seq = list(eval(img_seq.strip('[').strip(']')))
         data['img_seq'] = img_seq
-
-        # access_time = registrationRecord.access_time.strftime(static.datetime_format)
-        # data['access_time'] = access_time
-        # print data['img_seq']
+    request.session['collect_group'] = data['collect_group']
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 def register(request):
     if 'sid' not in request.session:
         return render(request, "index_signin.html")
     registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
-    print request.POST['cake']
-    print request.POST['water']
-    print request.POST['img_seq']
-    print request.POST['collect_group']
-    print request.POST['exp_group']
+    # print 'views.register',request.POST['cake']
+    # print 'views.register',request.POST['water']
+    # print 'views.register',request.POST['img_seq']
+    # print 'views.register',request.POST['collect_group']
+    # print 'views.register',request.POST['exp_group']
+    # print 'views.register',request.POST['recog']
     # SID has been used
+        
     if registrationRecord.mooncake != 'nil':
         return JsonResponse({"message": "The SID has been registered!","myStatus":0,"collect_group":registrationRecord.collect_group})
     try:
         # registrationRecord = RegistrationRecord.objects.create(sid = request.POST['sid'],name = request.POST['name'],mooncake = request.POST['cake'],water = request.POST['water'],img_seq = request.POST['img_seq'],access_time = datetime.datetime.strptime(request.POST['access_time'], static.datetime_format),reg_time = datetime.datetime.now(),collect_group = request.POST['collect_group'],exp_group = request.POST['exp_group'])
-        registrationRecord.mooncake = request.POST['cake']
-        registrationRecord.water = request.POST['water']
-        if registrationRecord.recog == 'nil':
-            registrationRecord.reg_time = timezone.now()   
-            registrationRecord.recog = request.POST['recog']
+        registrationRecord.mooncake = request.POST['mooncake']
+
+        if request.session['collect_group'] == 1 and registrationRecord.recog == 'nil':
+
+            registrationRecord.reg_time = timezone.now()  
+            registrationRecord.water = request.POST['water']
+            registrationRecord.recog = request.POST['fb']
+        
         registrationRecord.save()
-        return JsonResponse({"message": "Registered successfully!","myStatus":1,"collect_group":request.POST['collect_group'][0]})
+        return JsonResponse({"message": "Registered successfully!","myStatus":1,"collect_group":request.session['collect_group']})
     except Exception as e: 
+        print str(e)
         return JsonResponse({"message": str(e),"myStatus":2})
     
 
@@ -215,13 +226,20 @@ def tracking(request):
 
 
 def checkSidEid(request):
-    print request.POST['sid']
-    print request.POST['name']
+    # print 'views.checkSidSid',request.POST['sid']
+    # print 'views.checkSidEid',request.POST['eid']
     if RegistrationRecord.objects.filter(sid=request.POST['sid']).count() > 0:
         registrationRecord = RegistrationRecord.objects.filter(sid=request.POST['sid'])[0]
-        if registrationRecord.name != request.POST['name']:
-            return JsonResponse({"message": 'not match',"myStatus":1})
-    return JsonResponse({"message": 'not match',"myStatus":0})
+        if registrationRecord.name != request.POST['eid']:
+            return JsonResponse({"message": 'not match',"myStatus":0})
+        else:
+
+            request.session['sid'] = request.POST['sid']
+            request.session['eid'] = request.POST['eid']
+            return JsonResponse({"message": 'success',"myStatus":1})
+    request.session['sid'] = request.POST['sid']
+    request.session['eid'] = request.POST['eid']
+    return JsonResponse({"message": 'registrations',"myStatus":1})
 
 
 def beforeRecogAfterClaiming(request):
@@ -238,8 +256,8 @@ def beforeRecogAfterClaiming(request):
 def recog(request):
     registrationRecord = RegistrationRecord.objects.filter(sid=request.POST['info'])[0]
     if registrationRecord.recog == 'nil':
-        print request.POST['info'],'is updating recog',request.POST['recog']
-        registrationRecord.recog = request.POST['recog']
+        print request.POST['info'],'is updating recog',request.POST['fb']
+        registrationRecord.recog = request.POST['fb']
         registrationRecord.reg_time = timezone.now()
         registrationRecord.save()
         return JsonResponse({"message": "success","myStatus":0})

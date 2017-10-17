@@ -79,13 +79,7 @@
     </header>
 
     <!-- Page Content -->
-    <section class="py-5">
-      <div class="container">
-        <h1>Get one free moon cake for FREE !!!</h1>
-        <p>Each LSK resident could get a moon cake freely for Mid-autumn festival.</p>
-        <p>Registration is available in the <b>LAST PAGE</b>.</p>
-      </div>
-    </section>
+
 
     <!-- Footer -->
     <footer class="py-5 bg-dark">
@@ -139,7 +133,7 @@
                               {% csrf_token %}
                             <input id="sid" class="form-control" type="text" placeholder="Student ID" name="sid">
                             <input id="name" class="form-control" type="text" placeholder="EID" name="name">
-                            <button class="btn btn-default btn-login" disabled type='submit' value="Submit" id='submit'>Submit</button>
+                            <button class="btn btn-default btn-login" value="Submit" id='submit'>Submit</button>
                             </form>
                         </div>
                      </div>
@@ -151,7 +145,11 @@
 
 
 
-
+<script type="text/javascript">
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+</script>
 
 
 

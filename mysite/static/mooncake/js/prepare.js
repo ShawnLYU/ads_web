@@ -18,11 +18,11 @@ function openLoginModal(id){
     
 }
 function shakeModal(){
-    $('#loginModal .modal-dialog').addClass('shake');
-            // $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
-            setTimeout( function(){ 
-                $('#loginModal .modal-dialog').removeClass('shake'); 
-    }, 1000 ); 
+    // $('#confirmModal .modal-dialog').addClass('shake');
+    //         // $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
+    //         setTimeout( function(){ 
+    //             $('#confirmModal .modal-dialog').removeClass('shake'); 
+    // }, 1000 ); 
 }
 
 function getFormData($form){
@@ -42,6 +42,9 @@ function sleep(miliseconds) {
     }
 }
 
+function afterRegister(){
+
+}
 
 
 
@@ -151,8 +154,9 @@ $('#_prev').preBind('click', function() {
                     dataType: "json",
                     data : formData
                 }).done(function(callback){
+                    $("#loginModal").modal('hide');
                     console.log(callback['myStatus']);
-                    openLoginModal('#loginModal');
+                    openLoginModal('#confirmModal');
                     if(callback['myStatus']==2){
                         // $("#exampleModalLabel").text('');
                         // $("#exampleModalLabel").text('Registration Failed!');
@@ -217,15 +221,16 @@ $('#_prev').preBind('click', function() {
                 formData['img_seq'] = exp_data['img_seq'].toString()
                 formData['collect_group'] = exp_data['collect_group']
                 formData['exp_group'] = exp_data['exp_group']
-                formData['recog'] = $('#recogForm :input').eq(1).val()
+                formData['recog'] = $('input[name=fb]:checked').val()
                 $.ajax({
                     url: '/mooncake/register/',
                     type: 'POST',
                     dataType: "json",
                     data : formData
                 }).done(function(callback){
+                    $("#loginModal").modal('hide');
                     console.log(callback['myStatus']);
-                    openLoginModal('#loginModal');
+                    openLoginModal('#confirmModal');
                     if(callback['myStatus']==2){
                         // $("#exampleModalLabel").text('');
                         // $("#exampleModalLabel").text('Registration Failed!');
@@ -304,6 +309,10 @@ $('#_prev').preBind('click', function() {
         
         if($('div.carousel-item.active').index() === $('div.carousel-item').length-2){
             $('#_next').hide();
+            $('#loginModal').modal('show');
+            if(exp_data['exp_group'] == 1 || exp_data['exp_group']==3){
+                toggleAdsModal("ads_modal_"+exp_data['img_seq'][8]);
+            }
             // if(ads.indexOf(exp_data['img_seq'][exp_data['img_seq'].length-1])!=-1){
             //     toggleAdsModal("ads_modal_"+exp_data['img_seq'][exp_data['img_seq'].length-1]);
             // }

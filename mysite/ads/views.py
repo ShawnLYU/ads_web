@@ -121,6 +121,7 @@ def initializeExp(request):
         '''
         # print this_id % 4 + 1
         data['exp_group'] = this_id % 4 + 1 # starting from 1
+        # data['collect_group'] = 1
         data['collect_group'] = 1 if this_id < 4 else 2 if this_id < 8 else 3
         # print data['collect_group']
         # data['collect_group'] = 1

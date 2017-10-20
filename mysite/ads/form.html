@@ -25,14 +25,21 @@
                 <li>Choose your water</li>
                 <li>Tips</li>
                 <li>Test your memory</li>
+                <li>Collection date</li>
             </ul>
             <!-- fieldsets -->
-            <fieldset>
+            <fieldset style="font-size: 20px;">
                 <h2 class="fs-title">Choose your mooncake</h2>
                 <!-- <h3 class="fs-subtitle">Tell us something more about you</h3> -->
-                <label class="radio-inline"><input type="radio" value="arome" name="mooncake">arome(東海堂)</label>
-                <label class="radio-inline"><input type="radio" value="keewah" name="mooncake">kee wah(奇華)</label>
-                <label class="radio-inline"><input type="radio" value="wingwah" name="mooncake">wingwah(榮華)</label>
+                <div class="radio">
+                  <label><input type="radio" value="arome" name="mooncake">Arome(東海堂)</label>
+                </div>
+                <div class="radio">
+                  <label><input type="radio" value="keewah" name="mooncake">Kee Wah(奇華)</label>
+                </div>
+                <div class="radio">
+                  <label><input type="radio" value="wingwah" name="mooncake">Wing Wah(榮華)</label>
+                </div>
                 <input type="button" name="next" class="next action-button" value="Next"/>
             </fieldset>
             <fieldset>
@@ -99,6 +106,20 @@
 
                 <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
                 <input type="submit" name="submit" class="submit action-button" value="Submit"/>
+                <input type="button" hidden name="next" id='showResult' class="next action-button" value="Next"/>
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-title">Result date</h2>
+                <!-- <h3 class="fs-subtitle">Fill in your credentials</h3> -->
+                <div >
+                  <h id='returnSta'></h>
+                  <h id='returnMsg'></h>
+                </div>
+
+
+
+                
+                
             </fieldset>
         </form>
     </div>

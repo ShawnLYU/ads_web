@@ -41,6 +41,27 @@ function sleep(miliseconds) {
     while (currentTime + miliseconds >= new Date().getTime()) {
     }
 }
+function firstAds(modal_id){
+    document.getElementById(modal_id).style.display='none';
+    var countDownDate = 3;
+    var x = setInterval(function() {
+
+      // Find the distance between now an the count down date
+      countDownDate = countDownDate - 1;
+      // Display the result in the element with id="demo"
+      document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
+
+      // If the count down is finished, write some text 
+      if (countDownDate <0) {
+        clearInterval(x);
+        document.getElementById("countdown").innerHTML = "Next";
+        $("#countdown").prop("disabled", false);
+        $("#nextbutton").attr('data-slide','next');
+      }
+    }, 1000);
+}
+
+
 (function(){
     // Your base, I'm in it!
     var originalAddClassMethod = jQuery.fn.addClass;
@@ -137,14 +158,14 @@ $(document).ready(function(){
         if($('div.carousel-item.active').index()==7){
             $('#_next').hide();
         }
-        if($('div.carousel-item.active').index() === 0){
-            if(exp_data['exp_group']==1||exp_data['exp_group']==3){
-                if(!isToggled){
-                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
-                    clearTimeout(myVar);
-                }
-            }
-        }
+        // if($('div.carousel-item.active').index() === 0){
+        //     if(exp_data['exp_group']==1||exp_data['exp_group']==3){
+        //         if(!isToggled){
+        //             toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+        //             clearTimeout(myVar);
+        //         }
+        //     }
+        // }
         formData={};
         formData['img_index'] = $('div.carousel-item.active').index()+1;
         $.ajax({
@@ -157,22 +178,7 @@ $(document).ready(function(){
         });
     });
     $("#_next").hide();
-    var countDownDate = 5;
-    var x = setInterval(function() {
 
-      // Find the distance between now an the count down date
-      countDownDate = countDownDate - 1;
-      // Display the result in the element with id="demo"
-      document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
-
-      // If the count down is finished, write some text 
-      if (countDownDate < 1) {
-        clearInterval(x);
-        document.getElementById("countdown").innerHTML = "Next";
-        $("#countdown").prop("disabled", false);
-        $("#nextbutton").attr('data-slide','next');
-      }
-    }, 1000);
 
 
 
@@ -197,10 +203,49 @@ $(document).ready(function(){
                 social.push(i);
             }
         }
+        if(exp_data['exp_group']==1 || exp_data['exp_group']==3){
+            var countDownDate = 8;
+            var x = setInterval(function() {
+
+              // Find the distance between now an the count down date
+              countDownDate = countDownDate - 1;
+              // Display the result in the element with id="demo"
+              document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
+
+              // If the count down is finished, write some text 
+              if (countDownDate <4) {
+                clearInterval(x);
+                toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+                // document.getElementById("countdown").innerHTML = "Next";
+                // $("#countdown").prop("disabled", false);
+                // $("#nextbutton").attr('data-slide','next');
+              }
+            }, 1000);
+
+        }else{
+            var countDownDate = 5;
+            var x = setInterval(function() {
+
+              // Find the distance between now an the count down date
+              countDownDate = countDownDate - 1;
+              // Display the result in the element with id="demo"
+              document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
+
+              // If the count down is finished, write some text 
+              if (countDownDate <0) {
+                clearInterval(x);
+                // toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+                document.getElementById("countdown").innerHTML = "Next";
+                $("#countdown").prop("disabled", false);
+                $("#nextbutton").attr('data-slide','next');
+              }
+            }, 1000);
+        }
+
 
         if(exp_data['exp_group']==1||exp_data['exp_group']==3){
             $("#_next").attr('data-slide','next');
-            myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 10000);
+        //     myVar = setTimeout(function(){ toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]); isToggled=true}, 10000);
         }
         
         // if(data['collect_group'] != 1){
@@ -220,16 +265,16 @@ $(document).ready(function(){
         generateFormPop();
         // submitting the form
         
-        $('#tipsSubmit').click(function(){
-            $.ajax({
-                url: '/mooncake/beforerecog/',
-                type: 'POST',
-                dataType: "json",
-                data : exp_data
-            });
-            $('#recogTipsModal').modal('hide');
-            openLoginModal('#recogModal');
-        })
+        // $('#tipsSubmit').click(function(){
+        //     $.ajax({
+        //         url: '/mooncake/beforerecog/',
+        //         type: 'POST',
+        //         dataType: "json",
+        //         data : exp_data
+        //     });
+        //     $('#recogTipsModal').modal('hide');
+        //     openLoginModal('#recogModal');
+        // })
         
         $('#signup').click(function(){
             // openLoginModal('#loginModal');
@@ -247,159 +292,159 @@ $(document).ready(function(){
 
 
         })
-        $('#fake_submit').click(function(){
+        // $('#fake_submit').click(function(){
 
-            if(exp_data['collect_group'] == 1){
-                $("#loginModal").modal('hide');
-                openLoginModal('#recogTipsModal');
+        //     if(exp_data['collect_group'] == 1){
+        //         $("#loginModal").modal('hide');
+        //         openLoginModal('#recogTipsModal');
 
-            }
-            else{
-                formData = getFormData($("#myform"));
-                formData['access_time'] = exp_data['access_time']
-                formData['img_seq'] = exp_data['img_seq'].toString()
-                formData['collect_group'] = exp_data['collect_group']
-                formData['exp_group'] = exp_data['exp_group']
-                formData['recog'] = $('#recogForm :input').eq(1).val()
-                $.ajax({
-                    url: '/mooncake/register/',
-                    type: 'POST',
-                    dataType: "json",
-                    data : formData
-                }).done(function(callback){
-                    $("#loginModal").modal('hide');
-                    console.log(callback['myStatus']);
-                    openLoginModal('#confirmModal');
-                    if(callback['myStatus']==2){
-                        // $("#exampleModalLabel").text('');
-                        // $("#exampleModalLabel").text('Registration Failed!');
-                        // $("#exampleModalBody").text('');
-                        // $("#exampleModalBody").text(callback['message']);
-                        // $('#myModal').modal('toggle');
-                        $('.error').attr('class', 'error alert alert-danger').html(callback['message']);
-                        shakeModal();
-                    }else if(callback['myStatus']==0){
-                        var collect_time;
-                        switch(callback['collect_group']){
-                            case '1':
-                                collect_time = collect_time_1
-                                break;
-                            case '2':
-                                collect_time = collect_time_2
-                                break;
-                            case '3':
-                                collect_time = collect_time_3
-                                break;
-                        }
-                        // $("#exampleModalLabel").text('');
-                        // $("#exampleModalLabel").text('Registration Failed!');
-                        // $("#exampleModalBody").text('');
-                        // $("#exampleModalBody").text(callback['message']);
-                        // $("#exampleModalBody").append('<p>You are assigned to claim on: '+collect_time+'.</p>');
-                        // $('#myModal').modal('toggle');
-                        $('.error').attr('class', 'error alert alert-danger').html('SID has been registered, claim on: '+collect_time);
-                        shakeModal();
-                    }else{
-                        var collect_time;
-                        switch(callback['collect_group']){
-                            case '1':
-                                collect_time = collect_time_1
-                                break;
-                            case '2':
-                                collect_time = collect_time_2
-                                break;
-                            case '3':
-                                collect_time = collect_time_3
-                                break;
-                        }
-                        // $("#exampleModalLabel").text('');
-                        // $("#exampleModalLabel").text('Registration Successfully!');
-                        // $("#exampleModalBody").text('');
-                        // $("#exampleModalBody").text('You are assigned to claim on: '+collect_time+'.');
-                        // $('#myModal').modal('toggle');
-                        $('.error').attr('class', 'error alert alert-success').html('You are assigned to claim on: '+collect_time);
-                        shakeModal();
-                    }
+        //     }
+        //     else{
+        //         formData = getFormData($("#myform"));
+        //         formData['access_time'] = exp_data['access_time']
+        //         formData['img_seq'] = exp_data['img_seq'].toString()
+        //         formData['collect_group'] = exp_data['collect_group']
+        //         formData['exp_group'] = exp_data['exp_group']
+        //         formData['recog'] = $('#recogForm :input').eq(1).val()
+        //         $.ajax({
+        //             url: '/mooncake/register/',
+        //             type: 'POST',
+        //             dataType: "json",
+        //             data : formData
+        //         }).done(function(callback){
+        //             $("#loginModal").modal('hide');
+        //             console.log(callback['myStatus']);
+        //             openLoginModal('#confirmModal');
+        //             if(callback['myStatus']==2){
+        //                 // $("#exampleModalLabel").text('');
+        //                 // $("#exampleModalLabel").text('Registration Failed!');
+        //                 // $("#exampleModalBody").text('');
+        //                 // $("#exampleModalBody").text(callback['message']);
+        //                 // $('#myModal').modal('toggle');
+        //                 $('.error').attr('class', 'error alert alert-danger').html(callback['message']);
+        //                 shakeModal();
+        //             }else if(callback['myStatus']==0){
+        //                 var collect_time;
+        //                 switch(callback['collect_group']){
+        //                     case '1':
+        //                         collect_time = collect_time_1
+        //                         break;
+        //                     case '2':
+        //                         collect_time = collect_time_2
+        //                         break;
+        //                     case '3':
+        //                         collect_time = collect_time_3
+        //                         break;
+        //                 }
+        //                 // $("#exampleModalLabel").text('');
+        //                 // $("#exampleModalLabel").text('Registration Failed!');
+        //                 // $("#exampleModalBody").text('');
+        //                 // $("#exampleModalBody").text(callback['message']);
+        //                 // $("#exampleModalBody").append('<p>You are assigned to claim on: '+collect_time+'.</p>');
+        //                 // $('#myModal').modal('toggle');
+        //                 $('.error').attr('class', 'error alert alert-danger').html('SID has been registered, claim on: '+collect_time);
+        //                 shakeModal();
+        //             }else{
+        //                 var collect_time;
+        //                 switch(callback['collect_group']){
+        //                     case '1':
+        //                         collect_time = collect_time_1
+        //                         break;
+        //                     case '2':
+        //                         collect_time = collect_time_2
+        //                         break;
+        //                     case '3':
+        //                         collect_time = collect_time_3
+        //                         break;
+        //                 }
+        //                 // $("#exampleModalLabel").text('');
+        //                 // $("#exampleModalLabel").text('Registration Successfully!');
+        //                 // $("#exampleModalBody").text('');
+        //                 // $("#exampleModalBody").text('You are assigned to claim on: '+collect_time+'.');
+        //                 // $('#myModal').modal('toggle');
+        //                 $('.error').attr('class', 'error alert alert-success').html('You are assigned to claim on: '+collect_time);
+        //                 shakeModal();
+        //             }
 
-                });
+        //         });
 
-            }
+        //     }
             
-        })
-        $('#submit').click(function(){
-                $('#recogModal').modal('hide'); 
-                // submit the form to the server
-                formData = getFormData($("#myform"));
-                formData['access_time'] = exp_data['access_time']
-                formData['img_seq'] = exp_data['img_seq'].toString()
-                formData['collect_group'] = exp_data['collect_group']
-                formData['exp_group'] = exp_data['exp_group']
-                formData['recog'] = $('input[name=fb]:checked').val()
-                $.ajax({
-                    url: '/mooncake/register/',
-                    type: 'POST',
-                    dataType: "json",
-                    data : formData
-                }).done(function(callback){
-                    $("#loginModal").modal('hide');
-                    console.log(callback['myStatus']);
-                    openLoginModal('#confirmModal');
-                    if(callback['myStatus']==2){
-                        // $("#exampleModalLabel").text('');
-                        // $("#exampleModalLabel").text('Registration Failed!');
-                        // $("#exampleModalBody").text('');
-                        // $("#exampleModalBody").text(callback['message']);
-                        // $('#myModal').modal('toggle');
-                        $('.error').attr('class', 'error alert alert-danger').html(callback['message']);
-                        shakeModal();
-                    }else if(callback['myStatus']==0){
-                        var collect_time;
-                        switch(callback['collect_group']){
-                            case '1':
-                                collect_time = collect_time_1
-                                break;
-                            case '2':
-                                collect_time = collect_time_2
-                                break;
-                            case '3':
-                                collect_time = collect_time_3
-                                break;
-                        }
-                        // $("#exampleModalLabel").text('');
-                        // $("#exampleModalLabel").text('Registration Failed!');
-                        // $("#exampleModalBody").text('');
-                        // $("#exampleModalBody").text(callback['message']);
-                        // $("#exampleModalBody").append('<p>You are assigned to claim on: '+collect_time+'.</p>');
-                        // $('#myModal').modal('toggle');
-                        $('.error').attr('class', 'error alert alert-danger').html('SID has been registered, claim on: '+collect_time);
-                        shakeModal();
-                    }else{
-                        var collect_time;
-                        switch(callback['collect_group']){
-                            case '1':
-                                collect_time = collect_time_1
-                                break;
-                            case '2':
-                                collect_time = collect_time_2
-                                break;
-                            case '3':
-                                collect_time = collect_time_3
-                                break;
-                        }
-                        // $("#exampleModalLabel").text('');
-                        // $("#exampleModalLabel").text('Registration Successfully!');
-                        // $("#exampleModalBody").text('');
-                        // $("#exampleModalBody").text('You are assigned to claim on: '+collect_time+'.');
-                        // $('#myModal').modal('toggle');
-                        $('.error').attr('class', 'error alert alert-success').html('You are assigned to claim on: '+collect_time);
-                        shakeModal();
-                    }
+        // })
+        // $('#submit').click(function(){
+        //         $('#recogModal').modal('hide'); 
+        //         // submit the form to the server
+        //         formData = getFormData($("#myform"));
+        //         formData['access_time'] = exp_data['access_time']
+        //         formData['img_seq'] = exp_data['img_seq'].toString()
+        //         formData['collect_group'] = exp_data['collect_group']
+        //         formData['exp_group'] = exp_data['exp_group']
+        //         formData['recog'] = $('input[name=fb]:checked').val()
+        //         $.ajax({
+        //             url: '/mooncake/register/',
+        //             type: 'POST',
+        //             dataType: "json",
+        //             data : formData
+        //         }).done(function(callback){
+        //             $("#loginModal").modal('hide');
+        //             console.log(callback['myStatus']);
+        //             openLoginModal('#confirmModal');
+        //             if(callback['myStatus']==2){
+        //                 // $("#exampleModalLabel").text('');
+        //                 // $("#exampleModalLabel").text('Registration Failed!');
+        //                 // $("#exampleModalBody").text('');
+        //                 // $("#exampleModalBody").text(callback['message']);
+        //                 // $('#myModal').modal('toggle');
+        //                 $('.error').attr('class', 'error alert alert-danger').html(callback['message']);
+        //                 shakeModal();
+        //             }else if(callback['myStatus']==0){
+        //                 var collect_time;
+        //                 switch(callback['collect_group']){
+        //                     case '1':
+        //                         collect_time = collect_time_1
+        //                         break;
+        //                     case '2':
+        //                         collect_time = collect_time_2
+        //                         break;
+        //                     case '3':
+        //                         collect_time = collect_time_3
+        //                         break;
+        //                 }
+        //                 // $("#exampleModalLabel").text('');
+        //                 // $("#exampleModalLabel").text('Registration Failed!');
+        //                 // $("#exampleModalBody").text('');
+        //                 // $("#exampleModalBody").text(callback['message']);
+        //                 // $("#exampleModalBody").append('<p>You are assigned to claim on: '+collect_time+'.</p>');
+        //                 // $('#myModal').modal('toggle');
+        //                 $('.error').attr('class', 'error alert alert-danger').html('SID has been registered, claim on: '+collect_time);
+        //                 shakeModal();
+        //             }else{
+        //                 var collect_time;
+        //                 switch(callback['collect_group']){
+        //                     case '1':
+        //                         collect_time = collect_time_1
+        //                         break;
+        //                     case '2':
+        //                         collect_time = collect_time_2
+        //                         break;
+        //                     case '3':
+        //                         collect_time = collect_time_3
+        //                         break;
+        //                 }
+        //                 // $("#exampleModalLabel").text('');
+        //                 // $("#exampleModalLabel").text('Registration Successfully!');
+        //                 // $("#exampleModalBody").text('');
+        //                 // $("#exampleModalBody").text('You are assigned to claim on: '+collect_time+'.');
+        //                 // $('#myModal').modal('toggle');
+        //                 $('.error').attr('class', 'error alert alert-success').html('You are assigned to claim on: '+collect_time);
+        //                 shakeModal();
+        //             }
 
-                });
+        //         });
                 
             
             
-        });
+        // });
     });
 
 
@@ -541,7 +586,7 @@ function generateFormPop(){
     var strVar="";
     strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/legend-of-midautumn-1.jpg')\">";
     strVar += " <div class=\"carousel-caption d-md-block\" style=\"bottom:20%;\">";
-    strVar += "     <button type=\"button\" id=\"signup\" class=\"btn btn-outline-warning btn-lg\" >Sign Up Now!<\/button>";
+    strVar += "     <button type=\"button\" id=\"signup\" class=\"btn btn-outline-warning btn-lg\" >Now choose your mooncake!<\/button>";
     strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
@@ -661,7 +706,7 @@ function toggleAdsModal(modal_id){
     setTimeout(function(){ 
         // alert("Hello");
         $('.text-center.close').html('');
-        $('#'+modal_id+ ' > p').before("    <span class=\"close\" style=\'color:#007bff;font-size: 3rem;\' onclick=\"document.getElementById('"+modal_id+"').style.display='none'\">&times;<\/span>")
+        $('#'+modal_id+ ' > p').before("    <span class=\"close\" style=\'color:#007bff;font-size: 3rem;\' onclick=\"firstAds('"+modal_id+"');\">&times;<\/span>")
         clearInterval(refreshIntervalId); 
     }, 6000);
 }

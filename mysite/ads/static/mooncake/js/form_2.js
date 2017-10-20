@@ -1,4 +1,6 @@
-
+var collect_time_1 = '2017-10-23 19:00 - 21:00'
+var collect_time_2 = '2017-10-25 19:00 - 21:00'
+var collect_time_3 = '2017-10-27 19:00 - 21:00'
 //jQuery time
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
@@ -85,9 +87,6 @@ $(".previous").click(function(){
 		easing: 'easeInOutBack'
 	});
 });
-var collect_time_1 = '2017-10-1 19:00 - 21:00'
-var collect_time_2 = '2017-10-2 19:00 - 21:00'
-var collect_time_3 = '2017-10-3 19:00 - 21:00'
 $(".submit").click(function(){
 	formData = getFormData($("#msform"));
 	if('mooncake' in formData == false){
@@ -106,7 +105,10 @@ $(".submit").click(function(){
             
             if(callback['myStatus']==2){
                 // $.notify(callback['message'], "error");
-                alert(callback['message']);
+                // alert(callback['message']);
+                $( "#showResult" ).trigger( "click" );
+                $("#returnSta").html('Failed!');
+                $("#returnMsg").html(callback['message']+' Please refresh this page and retry.');
             }else if(callback['myStatus']==0){
                 var collect_time;
                 switch(callback['collect_group']){
@@ -120,23 +122,29 @@ $(".submit").click(function(){
                         collect_time = collect_time_3
                         break;
                 }
-                alert('SID has been registered, claim on: '+collect_time+' You can close the window now.');
+                // alert('SID has been registered, claim on: '+collect_time+' You can close the window now.');
+                $( "#showResult" ).trigger( "click" );
+                $("#returnSta").html('Failed!');
+                $("#returnMsg").html('SID has been registered, claim on: '+collect_time+'. You can close the window now.');
                 // $('.error').attr('class', 'error alert alert-danger').html('SID has been registered, claim on: '+collect_time);
                 // shakeModal();
             }else{
                 var collect_time;
                 switch(callback['collect_group']){
-                    case '1':
+                    case 1:
                         collect_time = collect_time_1
                         break;
-                    case '2':
+                    case 2:
                         collect_time = collect_time_2
                         break;
-                    case '3':
+                    case 3:
                         collect_time = collect_time_3
                         break;
                 }
-                alert('Success! You are assigned to claim on: '+collect_time+' You can close the window now.');
+                $( "#showResult" ).trigger( "click" );
+                $("#returnSta").html('Succeed!');
+                $("#returnMsg").html('You are assigned to claim on: '+collect_time+' You can close the window now.');
+                // alert('Success! You are assigned to claim on: '+collect_time+' You can close the window now.');
                 // $('.error').attr('class', 'error alert alert-success').html('You are assigned to claim on: '+collect_time);
                 // shakeModal();
             }

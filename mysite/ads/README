@@ -6,7 +6,21 @@ MySQL:
 	GRANT ALL PRIVILEGES ON ads_database.* TO 'test'@'localhost' IDENTIFIED BY 'test';
 
 Images:
-	1-7 normal pics    8,9:aad    10,11:aso    12,13:bad    14,15:bso
+	1-7 normal pics    8,9:aad    10-16:aso    17,18:bad    19,25:bso
 
-If collect_group != 1:
-	water is given by default, please ignore
+
+
+
+
+            	(exp_group) 1   2   3   4
+(collect_group)
+collect_1   				0   1   2   3
+collect_2   				4   5   6   7
+collect_3   				8   9   10  11
+
+
+exp_group: 1:aad 2:aso 3:bad 4:bso
+ad pics: producta (aad): willow productb (bad): fONT DOR productc: VODAVODA productd: SAN BENEDETTO
+
+
+%s /localhost:8000/dl380a.cs.cityu.edu.hk/g

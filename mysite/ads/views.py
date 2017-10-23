@@ -22,6 +22,7 @@ def login(request):
 def form(request):
     if 'sid' not in request.session.keys():
         return render(request, "index_signin_v2.html")
+    print 'views.form sid:',request.session['sid']
     if request.session['collect_group'] == 1:
         return render(request, "form.html")
     else:
@@ -37,7 +38,7 @@ def prepareInfo(request):
     return HttpResponse(json.dumps(data), content_type='application/json')
 def home(request):
     # print request.POST
-    # print request.POST['sid']
+    print request.session['sid']
     # print request.POST['name']
     if 'sid' not in request.session.keys():
         return render(request, "index_signin_v2.html")
@@ -149,7 +150,7 @@ def initializeExp(request):
             data['img_seq'] = base_pics
 
 
-
+        data['tracking'] = 0
         # data['access_time'] = timeAccessed.strftime(static.datetime_format)
 
         
@@ -176,6 +177,7 @@ def initializeExp(request):
         img_seq = registrationRecord.img_seq
         img_seq = list(eval(img_seq.strip('[').strip(']')))
         data['img_seq'] = img_seq
+        data['tracking'] = registrationRecord.tracking
     request.session['collect_group'] = data['collect_group']
     return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -199,7 +201,7 @@ def register(request):
 
         if request.session['collect_group'] == 1 and registrationRecord.recog == 'nil':
 
-            registrationRecord.reg_time = timezone.now()  
+            registrationRecord.reg_time = datetime.datetime.now()  
             registrationRecord.water = request.POST['water']
             registrationRecord.recog = request.POST['fb']
         
@@ -247,7 +249,7 @@ def beforeRecogAfterClaiming(request):
     print request.POST['sid'],'beforeRecogAfterClaiming'
     registrationRecord = RegistrationRecord.objects.filter(sid=request.POST['sid'])[0]
     if registrationRecord.recog == 'nil':
-        registrationRecord.access_time = timezone.now()
+        registrationRecord.access_time = datetime.datetime.now()
         registrationRecord.save()
         return JsonResponse({"message": "success","myStatus":0})
     return JsonResponse({"message": "fail","myStatus":1})
@@ -259,7 +261,7 @@ def recog(request):
     if registrationRecord.recog == 'nil':
         print request.POST['info'],'is updating recog',request.POST['fb']
         registrationRecord.recog = request.POST['fb']
-        registrationRecord.reg_time = timezone.now()
+        registrationRecord.reg_time = datetime.datetime.now()
         registrationRecord.save()
         return JsonResponse({"message": "success","myStatus":0})
     else:
@@ -269,7 +271,7 @@ def beforerecog(request):
     print request.session['sid']
     registrationRecord = RegistrationRecord.objects.filter(sid=request.session['sid'])[0]
     if registrationRecord.recog == 'nil':
-        registrationRecord.access_time = timezone.now()
+        registrationRecord.access_time = datetime.datetime.now()
         registrationRecord.save()
         return JsonResponse({"message": "success","myStatus":0})
     return JsonResponse({"message": "fail","myStatus":1})

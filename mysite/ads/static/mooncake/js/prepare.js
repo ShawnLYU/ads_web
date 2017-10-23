@@ -97,10 +97,10 @@ var collect_time_2 = '2017-10-2 19:00 - 21:00'
 var collect_time_3 = '2017-10-3 19:00 - 21:00'
 var pages=[false,false,false,false,false,false,false,false,false];
 var isNext = false;
-function showLoandingEffectNext(){
+function showLoandingEffectNext(gap){
     ind = $('div.carousel-item.active').index();
     if(pages[ind]==false){
-        if(ind > 0 && exp_data['img_seq'][ind-1]>7){
+        if(ind > 0 && exp_data['img_seq'][ind-1+gap]>7){
             $("#_next").bind('click', false);
             loader.show();
             pages[ind] = true;
@@ -147,9 +147,10 @@ function showLoandingEffectNext(){
 //     }
 
 // }
+var gap=0;
 $(document).ready(function(){
 
-
+    
     // pointer show or hide
     $("li").bind('cssClassChanged', function(){ 
         if($('div.carousel-item.active').index()==0){
@@ -167,7 +168,7 @@ $(document).ready(function(){
         //     }
         // }
         formData={};
-        formData['img_index'] = $('div.carousel-item.active').index()+1;
+        formData['img_index'] = $('div.carousel-item.active').index()+1+gap;
         $.ajax({
             url: '/mooncake/tracking/',
             data:formData,
@@ -263,6 +264,24 @@ $(document).ready(function(){
         // }
         // generateForm();
         generateFormPop();
+        for(var i=1 ; i < exp_data['tracking'] ; i++){
+            $(".carousel-item").eq(1).remove();
+            $(".carousel-indicators-li").eq(i).remove();
+            gap += 1;
+        }
+
+
+        // $(".carousel-item").each( function(index){
+        //     $(this).removeClass('active');
+           
+        // });
+        // $(".carousel-item").eq(exp_data['tracking']).addClass('active');
+        // $(".carousel-indicators-li").each( function(index){
+        //     $(this).removeClass('active');
+           
+        // });
+        // $(".carousel-indicators-li").eq(exp_data['tracking']).addClass('active');
+        
         // submitting the form
         
         // $('#tipsSubmit').click(function(){
@@ -453,7 +472,7 @@ $(document).ready(function(){
     
     $('#_next').click(function(){
         if(exp_data['exp_group']==2||exp_data['exp_group']==4){
-            showLoandingEffectNext();
+            showLoandingEffectNext(gap);
 
         }
         // if($('div.carousel-item.active').index() === $('div.carousel-item').length-1){
@@ -571,7 +590,8 @@ function generateImg(seq){
     // $('.carousel-inner').append(strVar);
     for (var i = 0, len = seq.length; i < len; i++) {
         var strVar="";
-        strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/img\/"+seq[i]+".jpg')\">";
+        strVar += "<div class=\"carousel-item\">";
+        strVar += "<img src='\/static\/mooncake\/media\/img\/"+seq[i]+".jpg'><\/img>";
         strVar += " <div class=\"carousel-caption d-none d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
         strVar += "<div class=\"type-js headline\">";
@@ -584,7 +604,8 @@ function generateImg(seq){
 }
 function generateFormPop(){
     var strVar="";
-    strVar += "<div class=\"carousel-item\" style=\"background-image: url('\/static\/mooncake\/media\/legend-of-midautumn-1.jpg')\">";
+    strVar += "<div class=\"carousel-item\">";
+    strVar += "<img src='\/static\/mooncake\/media\/legend-of-midautumn-1.jpg'><\/img>";
     strVar += " <div class=\"carousel-caption d-md-block\" style=\"bottom:20%;\">";
     strVar += "     <button type=\"button\" id=\"signup\" class=\"btn btn-outline-warning btn-lg\" >Now choose your mooncake!<\/button>";
     strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"

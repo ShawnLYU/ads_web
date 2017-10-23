@@ -50,7 +50,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 0px;
     margin-bottom: 10px;
-    width: 100%;
+    /*width: 100%;*/
     box-sizing: border-box;
     font-family: montserrat;
     color: #2C3E50;

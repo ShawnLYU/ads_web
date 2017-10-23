@@ -35,7 +35,7 @@
                 <label class="radio"><input type="radio" value="keewah" name="mooncake">kee wah(奇華)</label>
                 <label class="radio"><input type="radio" value="wingwah" name="mooncake">wingwah(榮華)</label> -->
 
-                <div class="radio">
+<!--                 <div class="radio">
                   <label><input type="radio" value="arome" name="mooncake">Arome(東海堂)</label>
                 </div>
                 <div class="radio">
@@ -43,7 +43,25 @@
                 </div>
                 <div class="radio">
                   <label><input type="radio" value="wingwah" name="mooncake">Wing Wah(榮華)</label>
-                </div>
+                </div> -->
+<div class="form-check">
+  <label class="form-check-label">
+    <input class="form-check-input" type="radio" name="mooncake" value="arome">
+    Arome(東海堂)
+  </label>
+</div>
+<div class="form-check">
+  <label class="form-check-label">
+    <input class="form-check-input" type="radio" name="mooncake" value="keewah">
+    Kee Wah(奇華)
+  </label>
+</div>
+<div class="form-check">
+  <label class="form-check-label">
+    <input class="form-check-input" type="radio" name="mooncake" value="wingwah">
+    Wing Wah(榮華)
+  </label>
+</div>
                 <input type="submit" name="submit" class="submit action-button" value="Submit"/>
                 <input type="button" hidden name="next" id='showResult' class="next action-button" value="Next"/>
             </fieldset>
@@ -53,6 +71,7 @@
                 <div >
                   <h id='returnSta'></h>
                   <h id='returnMsg'></h>
+                  <input type="button" name="next" onclick="window.close();" value="Next"/>
                 </div>
 
 

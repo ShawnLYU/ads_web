@@ -216,7 +216,28 @@ $(document).ready(function(){
               // If the count down is finished, write some text 
               if (countDownDate <4) {
                 clearInterval(x);
-                toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+                if (exp_data['tracking']==0){
+                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);    
+                }else{
+                    var _countDownDate = 3;
+                    var _x = setInterval(function() {
+
+                      // Find the distance between now an the count down date
+                      _countDownDate = _countDownDate - 1;
+                      // Display the result in the element with id="demo"
+                      document.getElementById("countdown").innerHTML = "Go in "+_countDownDate+" s";
+
+                      // If the count down is finished, write some text 
+                      if (_countDownDate <0) {
+                        clearInterval(_x);
+                        // toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+                        document.getElementById("countdown").innerHTML = "Next";
+                        $("#countdown").prop("disabled", false);
+                        $("#nextbutton").attr('data-slide','next');
+                      }
+                    }, 1000);
+                }
+                
                 // document.getElementById("countdown").innerHTML = "Next";
                 // $("#countdown").prop("disabled", false);
                 // $("#nextbutton").attr('data-slide','next');

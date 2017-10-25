@@ -266,7 +266,7 @@ $(document).ready(function(){
         generateFormPop();
         for(var i=1 ; i < exp_data['tracking'] ; i++){
             $(".carousel-item").eq(1).remove();
-            $(".carousel-indicators-li").eq(i).remove();
+            $(".carousel-indicators-li").eq(1).remove();
             gap += 1;
         }
 

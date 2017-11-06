@@ -21,10 +21,12 @@
         <link href="/static/mooncake/css/login-register.css" rel="stylesheet" />
         <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
         <link href="/static/mooncake/break-animate/css/style.css" rel="stylesheet" />
-        <link href="/static/mooncake/auto-typing/css/style.css" rel="stylesheet" />
+        
         <link href="/static/mooncake/css/recog.css" rel="stylesheet">
 
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 
@@ -51,10 +53,8 @@
 
     <header>
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
+        <ol class="carousel-indicators" style="bottom:20px;"> 
           <li class='carousel-indicators-li active' data-target="#carouselExampleIndicators" ></li>
-          <li class='carousel-indicators-li' data-target="#carouselExampleIndicators" ></li>
-          <li class='carousel-indicators-li' data-target="#carouselExampleIndicators" ></li>
           <li class='carousel-indicators-li' data-target="#carouselExampleIndicators" ></li>
           <li class='carousel-indicators-li' data-target="#carouselExampleIndicators" ></li>
           <li class='carousel-indicators-li' data-target="#carouselExampleIndicators" ></li>
@@ -63,16 +63,40 @@
           <li class='carousel-indicators-li' data-target="#carouselExampleIndicators" ></li>
         </ol>
         <div class="carousel-inner" role="listbox">
-          <div class="carousel-item active">
-            <img src='/static/mooncake/media/v3.jpg'></img>
-           <div class="carousel-caption d-none d-md-block" style="
-		       display: block!important;
+          <div class="carousel-item active" style="
+    margin: 30px auto;
+    width: 40%;
+    min-height: 550px;
+    min-width: 350px;
+    border-radius: 10px;
+    background:url(/static/mooncake/media/img/background.jpg) center center no-repeat;
+    background-size: 100% 100%;
+">
+            <!-- <img src='/static/mooncake/media/white-background-2.jpg'></img> -->
+           <div class="carousel-caption " style="
+		       
+           color: black;
+           text-align: inherit;
+           bottom: 120px;
+           
+           text-shadow: unset;
+           font-size:2rem;
 		       ">
-            <a href="#carouselExampleIndicators" role="button"  id='nextbutton'>
-               <button type="button" id="countdown" disabled class="btn btn-lg btn-primary">Go in  s
-               </button>
-               </a>
+           <p>To receive your mooncakes, please take the following steps:</p>
+           <ol class="">
+            <li class="">Browse previous photos of hall activities</li>
+            <li class="">Make your choice and submit</li>
+            <li class="">Jot down information of collection after submission</li>
+          </ol>
+          <p>We wish you a great holiday!</p>
 
+
+           </div>
+           <div class="carousel-caption d-md-block">
+          <a href="#carouselExampleIndicators" role="button"  id='nextbutton'>
+            <button type="button" id="countdown" disabled class="btn btn-lg btn-primary">Go in  s
+            </button>
+          </a>
            </div>
            </div>
           </div>  
@@ -83,7 +107,10 @@
           <span class="sr-only">Previous</span>
         </a> -->
         <div id='nav_button'>
-          <a class="carousel-control-next pageload-link" href="#carouselExampleIndicators" role="button"   id='_next'>
+          <a class="carousel-control-next pageload-link" href="#carouselExampleIndicators" role="button"   id='_next' style="
+    bottom: unset;
+    top: 30%;
+">
             <span class="carousel-control-next-icon" aria-hidden="true" style="background-image:url('/static/mooncake/media/right_v2.png');width: 50px;height: 50px;"></span>
             <span class="sr-only">Next</span>
           </a>

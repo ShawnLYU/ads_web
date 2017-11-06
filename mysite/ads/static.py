@@ -17,3 +17,12 @@ def prepare_img():
         else:
             isValid = True
     return [a,b]
+
+def foo(l):
+    group = random.randint(1,3)
+    if group == 1:
+        return [l[random.randint(0,1)],l[random.randint(2,3)]]
+    elif group == 2:
+        return [l[random.randint(0,1)],l[4]]
+    else:
+        return [l[random.randint(2,3)],l[4]]

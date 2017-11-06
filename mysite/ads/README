@@ -6,7 +6,7 @@ MySQL:
 	GRANT ALL PRIVILEGES ON ads_database.* TO 'test'@'localhost' IDENTIFIED BY 'test';
 
 Images:
-	1-7 normal pics    8,9:aad    10-16:aso    17,18:bad    19,25:bso
+	1-5 normal pics    6,7:aad    8-12:aso    13,14:bad    15-29:bso
 
 
 
@@ -24,3 +24,4 @@ ad pics: producta (aad): willow productb (bad): fONT DOR productc: VODAVODA prod
 
 
 %s /localhost:8000/dl380a.cs.cityu.edu.hk/g
+sudo /usr/local/apache2/bin/apachectl restart

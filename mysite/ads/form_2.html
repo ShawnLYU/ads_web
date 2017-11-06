@@ -16,7 +16,7 @@
 
 <body style="
     margin-top: 8%;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(245, 245, 245);
     margin-left: 10%;
     width: 80%;
     height: 70%;
@@ -28,7 +28,7 @@
             <!-- progressbar -->
 
             <!-- fieldsets -->
-            <fieldset style="font-size: 20px;">
+            <fieldset style="font-size: 20px;text-align: left;padding-left: 25%;">
                 <h2 class="fs-title">Choose your mooncake</h2>
                 <!-- <h3 class="fs-subtitle">Tell us something more about you</h3> -->
 <!--                 <label class="radio"><input type="radio" value="arome" name="mooncake">arome(東海堂)</label>
@@ -44,23 +44,25 @@
                 <div class="radio">
                   <label><input type="radio" value="wingwah" name="mooncake">Wing Wah(榮華)</label>
                 </div> -->
-<div class="form-check">
-  <label class="form-check-label">
-    <input class="form-check-input" type="radio" name="mooncake" value="arome">
-    Arome(東海堂)
-  </label>
-</div>
-<div class="form-check">
-  <label class="form-check-label">
-    <input class="form-check-input" type="radio" name="mooncake" value="keewah">
-    Kee Wah(奇華)
-  </label>
-</div>
-<div class="form-check">
-  <label class="form-check-label">
-    <input class="form-check-input" type="radio" name="mooncake" value="wingwah">
-    Wing Wah(榮華)
-  </label>
+<div style="">
+  <div class="form-check">
+    <label class="form-check-label">
+      <input class="form-check-input" type="radio" name="mooncake" value="arome">
+      Arome(東海堂)
+    </label>
+  </div>
+  <div class="form-check">
+    <label class="form-check-label">
+      <input class="form-check-input" type="radio" name="mooncake" value="keewah">
+      Kee Wah(奇華)
+    </label>
+  </div>
+  <div class="form-check">
+    <label class="form-check-label">
+      <input class="form-check-input" type="radio" name="mooncake" value="wingwah">
+      Wing Wah(榮華)
+    </label>
+  </div>
 </div>
                 <input type="submit" name="submit" class="submit action-button" value="Submit"/>
                 <input type="button" hidden name="next" id='showResult' class="next action-button" value="Next"/>
@@ -71,7 +73,7 @@
                 <div >
                   <h id='returnSta'></h>
                   <h id='returnMsg'></h>
-                  <input type="button" name="next" onclick="window.close();" value="Next"/>
+                  
                 </div>
 
 

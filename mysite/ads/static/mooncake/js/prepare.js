@@ -97,10 +97,10 @@ var collect_time_2 = '2017-10-2 19:00 - 21:00'
 var collect_time_3 = '2017-10-3 19:00 - 21:00'
 var pages=[false,false,false,false,false,false,false,false,false];
 var isNext = false;
-function showLoandingEffectNext(gap){
+function showLoandingEffectNext(){
     ind = $('div.carousel-item.active').index();
     if(pages[ind]==false){
-        if(ind > 0 && exp_data['img_seq'][ind-1+gap]>7){
+        if(ind > 0 && exp_data['img_seq'][ind-1]>5){
             $("#_next").bind('click', false);
             loader.show();
             pages[ind] = true;
@@ -147,8 +147,13 @@ function showLoandingEffectNext(gap){
 //     }
 
 // }
-var gap=0;
+
 $(document).ready(function(){
+
+    $('#carouselExampleIndicators').on('slid.bs.carousel', function () {
+    var currentSlide = $('#carouselExampleIndicators div.active').index();
+    sessionStorage.setItem('lastSlide', currentSlide);   
+    });
 
     
     // pointer show or hide
@@ -156,7 +161,7 @@ $(document).ready(function(){
         if($('div.carousel-item.active').index()==0){
             $('#_next').show();
         }       
-        if($('div.carousel-item.active').index()==7){
+        if($('div.carousel-item.active').index()==5){
             $('#_next').hide();
         }
         // if($('div.carousel-item.active').index() === 0){
@@ -168,7 +173,7 @@ $(document).ready(function(){
         //     }
         // }
         formData={};
-        formData['img_index'] = $('div.carousel-item.active').index()+1+gap;
+        formData['img_index'] = $('div.carousel-item.active').index()+1;
         $.ajax({
             url: '/mooncake/tracking/',
             data:formData,
@@ -199,70 +204,72 @@ $(document).ready(function(){
         // console.log(data);
         // console.log(data['img_seq']);
         exp_data = data;
-        for (i = 0; i < 7; i++) {
-            if(exp_data['img_seq'][i]>7){
-                social.push(i);
-            }
-        }
-        if(exp_data['exp_group']==1 || exp_data['exp_group']==3){
-            var countDownDate = 8;
-            var x = setInterval(function() {
+        // for (i = 0; i < 7; i++) {
+        //     if(exp_data['img_seq'][i]>7){
+        //         social.push(i);
+        //     }
+        // }
+        // if(!sessionStorage.lastSlide){
+        //     if(exp_data['exp_group']==1 || exp_data['exp_group']==3){
+        //         var countDownDate = 8;
+        //         var x = setInterval(function() {
 
-              // Find the distance between now an the count down date
-              countDownDate = countDownDate - 1;
-              // Display the result in the element with id="demo"
-              document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
+        //           // Find the distance between now an the count down date
+        //           countDownDate = countDownDate - 1;
+        //           // Display the result in the element with id="demo"
+        //           document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
 
-              // If the count down is finished, write some text 
-              if (countDownDate <4) {
-                clearInterval(x);
-                if (exp_data['tracking']==0){
-                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);    
-                }else{
-                    var _countDownDate = 3;
-                    var _x = setInterval(function() {
+        //           // If the count down is finished, write some text 
+        //           if (countDownDate <4) {
+        //             clearInterval(x);
+        //             // if (exp_data['tracking']==0){
+        //                 toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);    
+        //             // }else{
+        //             //     var _countDownDate = 3;
+        //             //     var _x = setInterval(function() {
 
-                      // Find the distance between now an the count down date
-                      _countDownDate = _countDownDate - 1;
-                      // Display the result in the element with id="demo"
-                      document.getElementById("countdown").innerHTML = "Go in "+_countDownDate+" s";
+        //             //       // Find the distance between now an the count down date
+        //             //       _countDownDate = _countDownDate - 1;
+        //             //       // Display the result in the element with id="demo"
+        //             //       document.getElementById("countdown").innerHTML = "Go in "+_countDownDate+" s";
 
-                      // If the count down is finished, write some text 
-                      if (_countDownDate <0) {
-                        clearInterval(_x);
-                        // toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
-                        document.getElementById("countdown").innerHTML = "Next";
-                        $("#countdown").prop("disabled", false);
-                        $("#nextbutton").attr('data-slide','next');
-                      }
-                    }, 1000);
-                }
-                
-                // document.getElementById("countdown").innerHTML = "Next";
-                // $("#countdown").prop("disabled", false);
-                // $("#nextbutton").attr('data-slide','next');
-              }
-            }, 1000);
+        //             //       // If the count down is finished, write some text 
+        //             //       if (_countDownDate <0) {
+        //             //         clearInterval(_x);
+        //             //         // toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+        //             //         document.getElementById("countdown").innerHTML = "Next";
+        //             //         $("#countdown").prop("disabled", false);
+        //             //         $("#nextbutton").attr('data-slide','next');
+        //             //       }
+        //             //     }, 1000);
+        //             // }
+                    
+        //             // document.getElementById("countdown").innerHTML = "Next";
+        //             // $("#countdown").prop("disabled", false);
+        //             // $("#nextbutton").attr('data-slide','next');
+        //           }
+        //         }, 1000);
 
-        }else{
-            var countDownDate = 5;
-            var x = setInterval(function() {
+        //     }else{
+        //         var countDownDate = 5;
+        //         var x = setInterval(function() {
 
-              // Find the distance between now an the count down date
-              countDownDate = countDownDate - 1;
-              // Display the result in the element with id="demo"
-              document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
+        //           // Find the distance between now an the count down date
+        //           countDownDate = countDownDate - 1;
+        //           // Display the result in the element with id="demo"
+        //           document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
 
-              // If the count down is finished, write some text 
-              if (countDownDate <0) {
-                clearInterval(x);
-                // toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
-                document.getElementById("countdown").innerHTML = "Next";
-                $("#countdown").prop("disabled", false);
-                $("#nextbutton").attr('data-slide','next');
-              }
-            }, 1000);
-        }
+        //           // If the count down is finished, write some text 
+        //           if (countDownDate <0) {
+        //             clearInterval(x);
+        //             // toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+        //             document.getElementById("countdown").innerHTML = "Next";
+        //             $("#countdown").prop("disabled", false);
+        //             $("#nextbutton").attr('data-slide','next');
+        //           }
+        //         }, 1000);
+        //     }
+        // }
 
 
         if(exp_data['exp_group']==1||exp_data['exp_group']==3){
@@ -273,9 +280,9 @@ $(document).ready(function(){
         // if(data['collect_group'] != 1){
         //     $('#water-select').hide();
         // }
-        generateImg(data['img_seq'].slice(0,7));
+        generateImg(data['img_seq'].slice(0,5));
         if(exp_data['exp_group'] == 1 || exp_data['exp_group']==3){
-            generateAdsModal(exp_data['img_seq'].slice(7,9));
+            generateAdsModal(exp_data['img_seq'].slice(5,7));
         }
         
         // if(data['exp_group'] === 1 ||  data['exp_group'] === 3){
@@ -285,11 +292,81 @@ $(document).ready(function(){
         // }
         // generateForm();
         generateFormPop();
-        for(var i=1 ; i < exp_data['tracking'] ; i++){
-            $(".carousel-item").eq(1).remove();
-            $(".carousel-indicators-li").eq(1).remove();
-            gap += 1;
+        if(sessionStorage.lastSlide && sessionStorage.sid == exp_data['sid']){
+            $("#carouselExampleIndicators").carousel(sessionStorage.lastSlide*1);
+        }else{
+            sessionStorage.removeItem('lastSlide');
+            sessionStorage.sid = exp_data['sid'];
+            if(exp_data['exp_group']==1 || exp_data['exp_group']==3){
+                var countDownDate = 8;
+                var x = setInterval(function() {
+
+                  // Find the distance between now an the count down date
+                  countDownDate = countDownDate - 1;
+                  // Display the result in the element with id="demo"
+                  document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
+
+                  // If the count down is finished, write some text 
+                  if (countDownDate <4) {
+                    clearInterval(x);
+                    // if (exp_data['tracking']==0){
+                        toggleAdsModal("ads_modal_"+exp_data['img_seq'][5]);    
+                    // }else{
+                    //     var _countDownDate = 3;
+                    //     var _x = setInterval(function() {
+
+                    //       // Find the distance between now an the count down date
+                    //       _countDownDate = _countDownDate - 1;
+                    //       // Display the result in the element with id="demo"
+                    //       document.getElementById("countdown").innerHTML = "Go in "+_countDownDate+" s";
+
+                    //       // If the count down is finished, write some text 
+                    //       if (_countDownDate <0) {
+                    //         clearInterval(_x);
+                    //         // toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+                    //         document.getElementById("countdown").innerHTML = "Next";
+                    //         $("#countdown").prop("disabled", false);
+                    //         $("#nextbutton").attr('data-slide','next');
+                    //       }
+                    //     }, 1000);
+                    // }
+                    
+                    // document.getElementById("countdown").innerHTML = "Next";
+                    // $("#countdown").prop("disabled", false);
+                    // $("#nextbutton").attr('data-slide','next');
+                  }
+                }, 1000);
+
+            }else{
+                var countDownDate = 5;
+                var x = setInterval(function() {
+
+                  // Find the distance between now an the count down date
+                  countDownDate = countDownDate - 1;
+                  // Display the result in the element with id="demo"
+                  document.getElementById("countdown").innerHTML = "Go in "+countDownDate+" s";
+
+                  // If the count down is finished, write some text 
+                  if (countDownDate <0) {
+                    clearInterval(x);
+                    // toggleAdsModal("ads_modal_"+exp_data['img_seq'][7]);
+                    document.getElementById("countdown").innerHTML = "Next";
+                    $("#countdown").prop("disabled", false);
+                    $("#nextbutton").attr('data-slide','next');
+                  }
+                }, 1000);
+            }
         }
+        // if(sessionStorage.sid && sessionStorage.sid == exp_data['sid'] && sessionStorage.lastSlide){
+        //     $("#carouselExampleIndicators").carousel(sessionStorage.lastSlide*1);
+        // }else{
+        //     sessionStorage.sid = exp_data['sid'];
+        // }   
+        // for(var i=1 ; i < exp_data['tracking'] ; i++){
+        //     $(".carousel-item").eq(1).remove();
+        //     $(".carousel-indicators-li").eq(1).remove();
+        //     gap += 1;
+        // }
 
 
         // $(".carousel-item").each( function(index){
@@ -320,7 +397,7 @@ $(document).ready(function(){
             // openLoginModal('#loginModal');
             if(exp_data['exp_group'] == 1 || exp_data['exp_group']==3){
                 if(isNext==false){ 
-                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][8]);
+                    toggleAdsModal("ads_modal_"+exp_data['img_seq'][6]);
                     isNext = true;
                 }else{
                     window.location.replace("http://localhost:8000/mooncake/form");
@@ -493,7 +570,7 @@ $(document).ready(function(){
     
     $('#_next').click(function(){
         if(exp_data['exp_group']==2||exp_data['exp_group']==4){
-            showLoandingEffectNext(gap);
+            showLoandingEffectNext();
 
         }
         // if($('div.carousel-item.active').index() === $('div.carousel-item').length-1){
@@ -611,11 +688,16 @@ function generateImg(seq){
     // $('.carousel-inner').append(strVar);
     for (var i = 0, len = seq.length; i < len; i++) {
         var strVar="";
-        strVar += "<div class=\"carousel-item\">";
-        strVar += "<img src='\/static\/mooncake\/media\/img\/"+seq[i]+".jpg'><\/img>";
-        strVar += " <div class=\"carousel-caption d-none d-md-block\">";
+        // strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 40%;min-height: 450px;min-width: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
+        strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 350px; height: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
+        // strVar += "<img src='\/static\/mooncake\/media\/img\/"+seq[i]+".jpg'><\/img>";
+        strVar += " <div class=\"carousel-caption d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
-        strVar += "<div class=\"type-js headline\">";
+        // strVar += "<div class=\"type-js headline\">";
+        strVar += "<div>";
+        strVar += "<p  style=\"display: inline;\">Like: <span class=\"glyphicon glyphicon-thumbs-up\"><\/span><\/p>";
+        strVar += "<p  style=\"display: inline; padding-left: 3%;\">Comment: <span class=\"glyphicon glyphicon-pencil\"><\/span><\/p>";
+        strVar += "<p  style=\"display: inline; padding-left: 3%;\">Share: <span class=\"glyphicon glyphicon-new-window\"><\/span><\/p>";
         // strVar += "     <p class='text-js'>" + words[seq[i]] + "<\/p>";
         strVar += " <\/div>";
         strVar += " <\/div>";
@@ -625,11 +707,11 @@ function generateImg(seq){
 }
 function generateFormPop(){
     var strVar="";
-    strVar += "<div class=\"carousel-item\">";
-    strVar += "<img src='\/static\/mooncake\/media\/legend-of-midautumn-1.jpg'><\/img>";
+    strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 40%;min-height: 450px;min-width: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/background.jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
+    // strVar += "<img src='\/static\/mooncake\/media\/legend-of-midautumn-1.jpg'><\/img>";
     strVar += " <div class=\"carousel-caption d-md-block\" style=\"bottom:20%;\">";
-    strVar += "     <button type=\"button\" id=\"signup\" class=\"btn btn-outline-warning btn-lg\" >Now choose your mooncake!<\/button>";
-    strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
+    strVar += "     <button type=\"button\" id=\"signup\" class=\"btn btn-lg btn-primary\" >Now choose your mooncake!<\/button>";
+    // strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
     $('.carousel-inner').append(strVar);

@@ -690,7 +690,7 @@ function generateImg(seq){
         var strVar="";
         // strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;    width: 40%;min-height: 550px;min-width: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
         // strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 350px; height: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
-        strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;background-size: 100% 100%;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;\">";
+        strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;\">";
         // strVar += "<img src='\/static\/mooncake\/media\/img\/"+seq[i]+".jpg'><\/img>";
         strVar += " <div class=\"carousel-caption d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";

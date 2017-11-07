@@ -124,7 +124,7 @@ $(".submit").click(function(){
                 }
                 // alert('SID has been registered, claim on: '+collect_time+' You can close the window now.');
                 $( "#showResult" ).trigger( "click" );
-                $("#returnSta").html('Failed!');
+                $("#returnTil").html('Registration failed!');
                 $("#returnMsg").html('SID has been registered, claim on: '+collect_time+'. You can close the window now.');
                 // $('.error').attr('class', 'error alert alert-danger').html('SID has been registered, claim on: '+collect_time);
                 // shakeModal();
@@ -142,7 +142,8 @@ $(".submit").click(function(){
                         break;
                 }
                 $( "#showResult" ).trigger( "click" );
-                $("#returnSta").html('<p>Congratulation!  You registration is successful!</p>');
+                $("#returnTil").html('Congratulation');
+                $("#returnSta").html('<p>You registration is successful!</p>');
                 $("#returnMsg").html('<p>You may collect your mooncakes at the following time and place.</p>');
                 $("#returnMsg").html('<p>Time: '+collect_time+'</p>');
                 $("#returnMsg").append('<p>Place: AC3 -</p>');

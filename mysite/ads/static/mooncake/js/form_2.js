@@ -142,8 +142,11 @@ $(".submit").click(function(){
                         break;
                 }
                 $( "#showResult" ).trigger( "click" );
-                $("#returnSta").html('Succeed!');
-                $("#returnMsg").html('You are assigned to claim on: '+collect_time+' You can close the window now.');
+                $("#returnSta").html('<p>Congratulation!  You registration is successful!</p>');
+                $("#returnMsg").html('<p>You may collect your mooncakes at the following time and place.</p>');
+                $("#returnMsg").html('<p>Time: '+collect_time+'</p>');
+                $("#returnMsg").append('<p>Place: AC3 -</p>');
+                $("#returnMsg").append('<p>Thank you for your participation. You may close the window now.</p>');
                 // alert('Success! You are assigned to claim on: '+collect_time+' You can close the window now.');
                 // $('.error').attr('class', 'error alert alert-success').html('You are assigned to claim on: '+collect_time);
                 // shakeModal();

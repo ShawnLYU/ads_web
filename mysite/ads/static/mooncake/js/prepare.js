@@ -688,8 +688,9 @@ function generateImg(seq){
     // $('.carousel-inner').append(strVar);
     for (var i = 0, len = seq.length; i < len; i++) {
         var strVar="";
-        // strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 40%;min-height: 450px;min-width: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
-        strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 350px; height: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
+        // strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;    width: 40%;min-height: 550px;min-width: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
+        // strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 350px; height: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
+        strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;background-size: 100% 100%;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/"+seq[i]+".jpg) center center no-repeat;\">";
         // strVar += "<img src='\/static\/mooncake\/media\/img\/"+seq[i]+".jpg'><\/img>";
         strVar += " <div class=\"carousel-caption d-md-block\">";
         // strVar += "     <h3>Third Slide<\/h3>";
@@ -707,10 +708,11 @@ function generateImg(seq){
 }
 function generateFormPop(){
     var strVar="";
-    strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 40%;min-height: 450px;min-width: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/background.jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
+    // strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 40%;min-height: 450px;min-width: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/background.jpg) center center no-repeat;background-size: 100% 100%;max-width:800px;\">";
+    strVar += "<div class=\"carousel-item\" style=\"margin: 30px auto;width: 40%; min-height: 550px;min-width: 350px;border-radius: 10px;background:url(\/static\/mooncake\/media\/img\/background.jpg) center center no-repeat;background-size: 100% 100%;\">";
     // strVar += "<img src='\/static\/mooncake\/media\/legend-of-midautumn-1.jpg'><\/img>";
     strVar += " <div class=\"carousel-caption d-md-block\" style=\"bottom:20%;\">";
-    strVar += "     <button type=\"button\" id=\"signup\" class=\"btn btn-lg btn-primary\" >Now choose your mooncake!<\/button>";
+    strVar += "     <button type=\"button\" id=\"signup\" class=\"btn btn-lg btn-primary\" >Now choose!<\/button>";
     // strVar += "     <p>If the form is not available, please access this website using a PC.<\/p>"
     strVar += " <\/div>";
     strVar += "<\/div>  "; 
@@ -808,7 +810,7 @@ function generateAdsModal(ads){
     for (var i = 0, len = ads.length; i < len; i++) {
         var strVar="";
         strVar += "<div id=\"ads_modal_"+ads[i]+"\" class=\"modal\">";
-        strVar += "<p class=\"text-center close\" style=\'color:#007bff;font-size: 3rem;\'><\/p>"
+        strVar += "<p class=\"text-center close\" style=\'color:#007bff;font-size: 6rem;\'><\/p>"
         // strVar += "    <span class=\"close\" onclick=\"document.getElementById('ads_modal_"+ads[i]+"').style.display='none'\">&times;<\/span>";
         strVar += "    <img class=\"modal-content\" src=\"\/static\/mooncake\/media\/img\/"+ads[i]+".jpg\">";
         // strVar += "    <div id=\"caption\"><\/div>";
@@ -830,7 +832,7 @@ function toggleAdsModal(modal_id){
     setTimeout(function(){ 
         // alert("Hello");
         $('.text-center.close').html('');
-        $('#'+modal_id+ ' > p').before("    <span class=\"close\" style=\'color:#007bff;font-size: 3rem;\' onclick=\"firstAds('"+modal_id+"');\">&times;<\/span>")
+        $('#'+modal_id+ ' > p').before("    <span class=\"close\" style=\'color:#007bff;font-size: 6rem;\' onclick=\"firstAds('"+modal_id+"');\">&times;<\/span>")
         clearInterval(refreshIntervalId); 
     }, 6000);
 }
